@@ -67,7 +67,7 @@ router.get('/:questionURL/answers', (req, res, next) => {
 router.post('/:questionURL/answers/add', (req, res, next) => {
   let answer = new Answer({
     questionURL: req.params.questionURL,
-    answerText: req.params.answerText,
+    answerText: req.body.answerText,
     votes: 0,
     views: 1,
     poster: req.body.poster
