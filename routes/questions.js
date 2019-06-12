@@ -54,7 +54,7 @@ router.get('', (req, res, next) => {
 })
 
 router.get('/:questionURL/answers', (req, res, next) => {
-  Answers.getAnswersByQuestionURL(req.params.questionURL, (err, answers) => {
+  Answer.getAnswersByQuestionURL(req.params.questionURL, (err, answers) => {
     if (err) throw err;
     if (answers){
       res.json({success: true, answers: answers})
