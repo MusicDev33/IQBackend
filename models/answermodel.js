@@ -10,6 +10,9 @@ const AnswerSchema = mongoose.Schema({
   poster: {
     type: String
   },
+  posterID: {
+    type: String
+  },
   views: {
     type: String
   },

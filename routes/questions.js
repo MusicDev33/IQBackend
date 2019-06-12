@@ -70,7 +70,8 @@ router.post('/:questionURL/answers/add', (req, res, next) => {
     answerText: req.body.answerText,
     votes: 0,
     views: 1,
-    poster: req.body.poster
+    poster: req.body.poster,
+    posterID: req.body.posterID
   })
 
   Answer.addAnswer(answer, (err, savedAnswer) => {
