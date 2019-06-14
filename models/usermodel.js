@@ -9,6 +9,9 @@ const UserSchema = mongoose.Schema({
   name: {
     type: String
   },
+  handle: {
+    type: String
+  },
   email: {
     type: String
   },
@@ -34,6 +37,17 @@ module.exports.getUserById = function(mongoID, callback){
 
 module.exports.getUserByEmail = function(email, callback){
   User.findOne({email: email}, (err, user) => {
+    if (err) callback(err, null)
+    if (!user){
+      callback(null, null);
+    }else{
+      callback(null, user);
+    }
+  })
+}
+
+module.exports.getUserByHandle = function(handle, callback){
+  User.findOne({handle: handle}, (err, user) => {
     if (err) callback(err, null)
     if (!user){
       callback(null, null);

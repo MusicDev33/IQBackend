@@ -14,6 +14,7 @@ router.post('/register', (req, res, next) => {
     fbTokens: [],
     name: req.body.firstName + " " + req.body.lastName,
     email: req.body.email,
+    handle: req.body.handle,
     phoneNumber: req.body.phoneNumber,
     password: req.body.password,
     profileImage: "",
