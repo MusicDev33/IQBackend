@@ -10,21 +10,38 @@ const config = require('../config/database')
 //Register
 router.post('/register', (req, res, next) => {
   console.log(req.body)
-  let newUser = new User({
-    fbTokens: [],
-    name: req.body.firstName + " " + req.body.lastName,
-    email: req.body.email,
-    handle: req.body.handle,
-    phoneNumber: req.body.phoneNumber,
-    password: req.body.password,
-    profileImage: "",
-    customization: {}
-  });
+  // Ugh, nested ifs AND callbacks. Can you think of anything worse?
+  // P.S. Maybe I just suck at writing decent code...
 
-  User.addUser(newUser, (err, user) => {
-    messages = ["Error on registering user.", "User " + user.name + " successfully registered!"]
-    res.json(AutoRes.AutoResC2(err, user, messages));
-  });
+  User.getUserByHandle(req.body.handle, (err, user) => {
+    if (err) throw err;
+    if (user){
+      res.json({success: false, msg: "There's already a user by that name!"});
+    }else{
+      User.getUserByEmail(req.body.email, (err, user) => {
+        if (err) throw err;
+        if (user){
+          res.json({success: false, msg: "This email is already associated with an account."})
+        }else{
+          let newUser = new User({
+            fbTokens: [],
+            name: req.body.firstName + " " + req.body.lastName,
+            email: req.body.email,
+            handle: req.body.handle,
+            phoneNumber: req.body.phoneNumber,
+            password: req.body.password,
+            profileImage: "",
+            customization: {}
+          });
+
+          User.addUser(newUser, (err, user) => {
+            messages = ["Error on registering user.", "User " + user.name + " successfully registered!"]
+            res.json(AutoRes.AutoResC2(err, user, messages));
+          });
+        }
+      })
+    }
+  })
 });
 
 router.post('/authenticate', (req, res, next) => {
