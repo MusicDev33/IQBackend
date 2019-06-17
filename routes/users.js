@@ -9,7 +9,6 @@ const config = require('../config/database')
 
 //Register
 router.post('/register', (req, res, next) => {
-  console.log(req.body)
   // Ugh, nested ifs AND callbacks. Can you think of anything worse?
   // P.S. Maybe I just suck at writing decent code...
 
