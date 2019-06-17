@@ -12,6 +12,10 @@ router.post('/register', (req, res, next) => {
   // Ugh, nested ifs AND callbacks. Can you think of anything worse?
   // P.S. Maybe I just suck at writing decent code...
 
+  if (req.body.handle.indexOf(' ') >= 0){
+    return res.json({success: false, msg: "You can't have spaces in your handle."})
+  }
+
   User.getUserByHandle(req.body.handle, (err, user) => {
     if (err) throw err;
     if (user){
