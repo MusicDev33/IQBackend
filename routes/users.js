@@ -82,6 +82,18 @@ router.post('/authenticate', (req, res, next) => {
   })
 });
 
+router.get('/profile/:handle', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+  console.log(req.params.handle)
+  User.getUserByHandle(req.params.handle, (err, user) => {
+    if (err) throw err;
+    if (user){
+      res.json({success: true, msg: "Successfully found user.", user: user})
+    }else{
+      res.json({success: false, msg: "Couldn't find user by handle."})
+    }
+  })
+})
+
 router.get('/profile', passport.authenticate('jwt', {session:false}),(req, res, next) => {
   res.json({user: req.user})
 })
