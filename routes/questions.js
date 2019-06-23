@@ -73,7 +73,6 @@ router.post('/:questionURL/answers/add', (req, res, next) => {
     poster: req.body.poster,
     posterID: req.body.posterID
   })
-
   Answer.addAnswer(answer, (err, savedAnswer) => {
     if (err) throw err;
     if (savedAnswer){
