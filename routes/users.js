@@ -90,6 +90,7 @@ router.get('/profile/:handle', (req, res, next) => {
     if (err) throw err;
     if (user){
       var returnUser = new User({
+        _id: user._id,
         name: user.name,
         handle: user.handle,
         profileImage: user.profileImage,
@@ -105,6 +106,8 @@ router.get('/profile/:handle', (req, res, next) => {
 });
 
 router.get('/:userid/questions', (req, res, next) => {
+  console.log("Questions requested.");
+  console.log(req.params.userid)
   Question.find({askerID: req.params.userid}, (err, questions) => {
     if (err) throw err;
     if (questions){
