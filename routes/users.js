@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/usermodel')
+const Question = require('../models/questionmodel')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
@@ -93,7 +94,18 @@ router.get('/profile/:handle', passport.authenticate('jwt', {session:false}), (r
       res.json({success: false, msg: "Couldn't find user by handle."})
     }
   })
-})
+});
+
+router.get('/:userid/questions', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+  Question.find({askerID: req.params.userid}, (err, questions) => {
+    if (err) throw err;
+    if (user){
+      res.json({success: true, msg: "Successfully found questions.", questions: questions})
+    }else{
+      res.json({success: false, msg: "Couldn't find user's questions."})
+    }
+  })
+});
 
 router.get('/profile', passport.authenticate('jwt', {session:false}),(req, res, next) => {
   res.json({user: req.user})
