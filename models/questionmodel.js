@@ -10,6 +10,9 @@ const QuestionSchema = mongoose.Schema({
   asker: {
     type: String
   },
+  askerID: {
+    type: String
+  },
   subject: {
     type: String
   },
