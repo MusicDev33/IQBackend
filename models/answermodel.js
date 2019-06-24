@@ -22,6 +22,9 @@ const AnswerSchema = mongoose.Schema({
   questionURL:{
     type: String
   },
+  questionText: {
+    type: String
+  }
   time: {
     type: String // time posted
   }

@@ -43,6 +43,17 @@ router.get('/:questionURL', (req, res, next) => {
   })
 })
 
+router.get('/id/:questionid', (req, res, next) => {
+  Question.findOne({_id: req.params.id}, (err, question) => {
+    if (err) throw err;
+    if (question){
+      res.json({success: true, question: question});
+    }else{
+      res.json({success: false, msg: "Couldn't get dat question by it's _id, yo!"});
+    }
+  })
+})
+
 router.get('', (req, res, next) => {
   Question.find().sort({'_id': -1}).exec(function(err, docs){
     if (err) throw err;
@@ -72,7 +83,8 @@ router.post('/:questionURL/answers/add', (req, res, next) => {
     votes: 0,
     views: 1,
     poster: req.body.poster,
-    posterID: req.body.posterID
+    posterID: req.body.posterID,
+    questionText: req.body.questionText
   })
   Answer.addAnswer(answer, (err, savedAnswer) => {
     if (err) throw err;
