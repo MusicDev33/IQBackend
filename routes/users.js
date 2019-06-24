@@ -85,19 +85,26 @@ router.post('/authenticate', (req, res, next) => {
   })
 });
 
-router.get('/profile/:handle', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-  console.log(req.params.handle)
+router.get('/profile/:handle', (req, res, next) => {
   User.getUserByHandle(req.params.handle, (err, user) => {
     if (err) throw err;
     if (user){
-      res.json({success: true, msg: "Successfully found user.", user: user})
+      var returnUser = new User({
+        name: user.name,
+        handle: user.handle,
+        profileImage: user.profileImage,
+        customization: user.customization,
+        credentials: user.credentials,
+        bio: user.bio
+      })
+      res.json({success: true, msg: "Successfully found user.", user: returnUser})
     }else{
       res.json({success: false, msg: "Couldn't find user by handle."})
     }
   })
 });
 
-router.get('/:userid/questions', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+router.get('/:userid/questions', (req, res, next) => {
   Question.find({askerID: req.params.userid}, (err, questions) => {
     if (err) throw err;
     if (questions){
@@ -108,7 +115,7 @@ router.get('/:userid/questions', passport.authenticate('jwt', {session:false}), 
   })
 });
 
-router.get('/:userid/answers', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+router.get('/:userid/answers', (req, res, next) => {
   Answer.find({posterID: req.params.userid}, (err, answers) => {
     if (err) throw err;
     if (answers){
