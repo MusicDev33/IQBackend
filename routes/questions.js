@@ -21,7 +21,8 @@ router.post('/add', (req, res, next) => {
     urlText: questionURL,
     subject: req.body.subject,
     homeworkSource: req.body.source,
-    asker: req.body.asker
+    asker: req.body.asker,
+    askerID: req.body.askerID
   });
 
   Question.addQuestion(newQuestion, (err, question) => {

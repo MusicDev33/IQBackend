@@ -99,7 +99,7 @@ router.get('/profile/:handle', passport.authenticate('jwt', {session:false}), (r
 router.get('/:userid/questions', passport.authenticate('jwt', {session:false}), (req, res, next) => {
   Question.find({askerID: req.params.userid}, (err, questions) => {
     if (err) throw err;
-    if (user){
+    if (questions){
       res.json({success: true, msg: "Successfully found questions.", questions: questions})
     }else{
       res.json({success: false, msg: "Couldn't find user's questions."})
