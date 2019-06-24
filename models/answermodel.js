@@ -24,7 +24,7 @@ const AnswerSchema = mongoose.Schema({
   },
   questionText: {
     type: String
-  }
+  },
   time: {
     type: String // time posted
   }
