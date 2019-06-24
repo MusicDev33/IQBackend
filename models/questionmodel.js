@@ -18,6 +18,12 @@ const QuestionSchema = mongoose.Schema({
   },
   answers: {
     type: Array
+  },
+  details: {
+    type: String
+  },
+  time: {
+    type: String
   }
 });
 

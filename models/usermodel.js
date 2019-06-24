@@ -9,6 +9,9 @@ const UserSchema = mongoose.Schema({
   name: {
     type: String
   },
+  credentials: {
+    type: Object
+  },
   handle: {
     type: String
   },
