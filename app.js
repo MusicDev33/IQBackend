@@ -37,10 +37,12 @@ require('./config/passport')(passport)
 const users = require('./routes/users');
 const questions = require('./routes/questions');
 const subjects = require('./routes/subjects');
+const subjects = require('./routes/sources');
 
 app.use('/api/v1/users', users);
 app.use('/api/v1/questions', questions);
 app.use('/api/v1/subjects', subjects);
+app.use('/api/v1/sources', sources);
 
 // create public folder with the index.html when finished
 app.use(express.static(path.join(__dirname, 'public')))
