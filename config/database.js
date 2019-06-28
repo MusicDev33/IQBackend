@@ -1,4 +1,4 @@
 module.exports = {
-  database: 'mongodb://localhost:27017/iqmain',
+  database: 'mongodb://localhost:27017/iqtest',
   secret: "$1358hbafbg@@"
 }
