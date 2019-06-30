@@ -21,6 +21,7 @@ router.post('/add', (req, res, next) => {
   })
 
   Subject.find({name: req.body.name.trim()}, (err, subject) => {
+    if (err) throw err;
     if (!subject){
       Subject.addSubject(req.body.questionURL, (err, subject) => {
         if (err) throw err;
