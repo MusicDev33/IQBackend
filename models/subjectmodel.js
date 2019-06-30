@@ -22,3 +22,25 @@ const SubjectSchema = mongoose.Schema({
 });
 
 const Subject = module.exports = mongoose.model('Subject', SubjectSchema);
+
+// Maybe move this to a real utility file
+module.exports.subjectNameToURL = function(subjectText){
+  var urlText = ""
+  var subjectText = subjectText
+  var specialChars = "!@#$%^&*()>< '"
+
+  for (var i = 0; i < subjectText.length; i++) {
+    if (specialChars.indexOf(subjectText[i]) > -1){
+      urlText += "-"
+    }else if (subjectText[i] == "?"){
+
+    }else{
+      urlText += subjectText[i]
+    }
+  }
+  return urlText
+}
+
+module.exports.addSubject = function(subject, callback){
+  subject.save(callback)
+}
