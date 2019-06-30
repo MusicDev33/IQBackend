@@ -37,7 +37,7 @@ require('./config/passport')(passport)
 const users = require('./routes/users');
 const questions = require('./routes/questions');
 const subjects = require('./routes/subjects');
-const subjects = require('./routes/sources');
+const source = require('./routes/sources');
 
 app.use('/api/v1/users', users);
 app.use('/api/v1/questions', questions);
