@@ -52,7 +52,7 @@ router.get('/:subjectname/count', (req, res, next) => {
   Question.estimatedDocumentCount({subject: req.params.subjectname}, (err, count) => {
     if (err) throw err;
     if (count){
-      res.json({success: true, msg: "Question count successfuly estimated.", count: count})
+      res.json({success: true, msg: "Question count successfully estimated.", count: count})
     }
   })
 })
