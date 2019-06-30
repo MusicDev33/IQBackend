@@ -16,7 +16,7 @@ const SourceSchema = mongoose.Schema({
   views: {
     type: String
   },
-  subjectURL:{
+  sourceURL:{
     type: String
   }
 });
