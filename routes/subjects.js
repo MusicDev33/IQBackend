@@ -13,17 +13,17 @@ const Subject = require('../models/subjectmodel')
 
 router.post('/add', (req, res, next) => {
   var subjectURL = Subject.subjectNameToURL(req.body.name)
-  var subject = new Subject({
+  var newSubject = new Subject({
     name: req.body.name,
     followers: 0,
     subjectURL: subjectURL,
     views: 0
   })
 
-  Subject.find({name: req.body.name.trim()}, (err, subject) => {
+  Subject.findOne({name: req.body.name.trim()}, (err, subject) => {
     if (err) throw err;
     if (!subject){
-      Subject.addSubject(req.body.questionURL, (err, subject) => {
+      Subject.addSubject(newSubject, (err, subject) => {
         if (err) throw err;
         if (subject){
           res.json({success: true, msg: "Subject added!"});
@@ -32,7 +32,7 @@ router.post('/add', (req, res, next) => {
         }
       })
     }else{
-      res.json({success: false, msg: "This topic already exists!"});
+      res.json({success: false, msg: "This topic already exists!", subject: subject});
     }
   })
 });
@@ -40,7 +40,7 @@ router.post('/add', (req, res, next) => {
 router.get('/:subjectname', (req, res, next) => {
   Question.find({subject: req.params.subjectname}, (err, questions) => {
     if (err) throw err;
-    if (question){
+    if (questions.length){
       res.json({success: true, questions: questions});
     }else{
       res.json({success: false, msg: "Couldn't find any questions on this topic."});
