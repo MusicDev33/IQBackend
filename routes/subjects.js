@@ -16,7 +16,6 @@ router.post('/add', (req, res, next) => {
   var subject = new Subject({
     name: req.body.name,
     followers: 0,
-    questions: 0,
     subjectURL: subjectURL,
     views: 0
   })
@@ -44,6 +43,15 @@ router.get('/:subjectname', (req, res, next) => {
       res.json({success: true, questions: questions});
     }else{
       res.json({success: false, msg: "Couldn't find any questions on this topic."});
+    }
+  })
+});
+
+router.get('/:subjectname/count', (req, res, next) => {
+  Question.estimatedDocumentCount({subject: req.params.subjectname}, (err, count) => {
+    if (err) throw err;
+    if (count){
+      res.json({success: true, msg: "Question count successfuly estimated.", count: count})
     }
   })
 })
