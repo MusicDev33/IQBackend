@@ -132,6 +132,10 @@ router.post('/:userid/subjects/add', (req, res, next) => {
   })
 });
 
+router.put('/:userid/subjects/remove', (req, res, next) => {
+  
+})
+
 
 
 router.get('/profile/:handle', (req, res, next) => {
