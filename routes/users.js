@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../models/usermodel')
 const Question = require('../models/questionmodel')
 const Answer = require('../models/answermodel')
+const Subject = require('../models/subjectmodel')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
@@ -36,7 +37,9 @@ router.post('/register', (req, res, next) => {
             phoneNumber: req.body.phoneNumber,
             password: req.body.password,
             profileImage: "",
-            customization: {}
+            customization: {},
+            currentTopics: [],
+            currentSources: []
           });
 
           User.addUser(newUser, (err, user) => {
@@ -84,6 +87,44 @@ router.post('/authenticate', (req, res, next) => {
 
   })
 });
+
+// Welcome to callback hell. Woe to those who actually want to know what
+// in the world is going on here...
+router.post('/:userid/subjects/add', (req, res, next) => {
+  User.getUserById(req.params.userid, (err, user) => {
+    if (err) throw err;
+    if (user){
+      Subject.findOne({name: req.body.subject}, (err, subject) => {
+        if (err) throw err;
+        if (subject){
+          if (user.currentTopics.includes(req.body.subject)){
+            res.json({success: false, msg: "Already subscribed to that subject."})
+          }else{
+            var subjectArray = user.currentTopics
+            subjectArray.push(req.body.subject)
+            User.addSubject(subjectArray, req.params.userid, (err, updatedUser) => {
+              if(updatedUser){
+                res.json({success: true,
+                  msg: "Updated user successfully!",
+                  updatedUser: updatedUser})
+              }else{
+                res.json({success: false, msg: "Could not update user..."})
+              }
+            });
+
+          }
+        }else{
+          res.json({success: false,
+            msg: "Couldn't find subject '"+req.body.subject+"'.'"})
+        }
+      })
+    }else{
+      res.json({success: false, msg: "Couldn't find user."})
+    }
+  })
+});
+
+
 
 router.get('/profile/:handle', (req, res, next) => {
   User.getUserByHandle(req.params.handle, (err, user) => {

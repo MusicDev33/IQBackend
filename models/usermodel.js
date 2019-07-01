@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const config = require("../config/database");
+const StringUtils = require("../ProtoChanges/string")
 
 const UserSchema = mongoose.Schema({
   fbTokens: {
@@ -32,6 +33,12 @@ const UserSchema = mongoose.Schema({
   },
   customization: {
     type: Object
+  },
+  currentSources: {
+    type: Array
+  },
+  currentTopics: {
+    type: Array
   }
 });
 
@@ -61,6 +68,19 @@ module.exports.getUserByHandle = function(handle, callback){
       callback(null, user);
     }
   })
+}
+
+module.exports.addSubject = function(subjectArray, userid, callback){
+  User.findOneAndUpdate(
+    {_id: userid},
+    {currentTopics: subjectArray}, {new: true},(err, updatedUser) => {
+      if (err) throw err;
+      if (updatedUser){
+        callback(null, updatedUser)
+      }else{
+        callback(null, null)
+      }
+    })
 }
 
 module.exports.addUser = function(newUser, callback){
