@@ -97,6 +97,7 @@ router.post('/:userid/subjects/add', (req, res, next) => {
       Subject.findOne({name: req.body.subject}, (err, subject) => {
         if (err) throw err;
         if (subject){
+          var subjectFollowerCount = subject.followers
           if (user.currentTopics.includes(req.body.subject)){
             res.json({success: false, msg: "Already subscribed to that subject."})
           }else{
@@ -104,9 +105,16 @@ router.post('/:userid/subjects/add', (req, res, next) => {
             subjectArray.push(req.body.subject)
             User.addSubject(subjectArray, req.params.userid, (err, updatedUser) => {
               if(updatedUser){
-                res.json({success: true,
-                  msg: "Updated user successfully!",
-                  updatedUser: updatedUser})
+                subjectFollowerCount += 1;
+                Subject.addFollower(req.body.subject, subjectFollowerCount, (err, updatedSubject) => {
+                  if (updatedSubject){
+                    res.json({success: true,
+                      msg: "Updated user and subject successfully!",
+                      updatedUser: updatedUser})
+                  }else{
+                    res.json({success: true, msg: "Something went wrong with this route. Tell Shelby ASAP."})
+                  }
+                })
               }else{
                 res.json({success: false, msg: "Could not update user..."})
               }

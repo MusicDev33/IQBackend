@@ -41,6 +41,19 @@ module.exports.subjectNameToURL = function(subjectText){
   return urlText
 }
 
+module.exports.addFollower = function(subject, newCount, callback){
+  Subject.findOneAndUpdate({name: subject},
+    {followers: newCount},
+    {new: true}, (err, updatedSubject) => {
+      if (err) throw err;
+      if (updatedSubject){
+        callback(null, updatedSubject);
+      }else{
+        callback(null, null)
+      }
+  })
+}
+
 module.exports.addSubject = function(subject, callback){
   subject.save(callback)
 }
