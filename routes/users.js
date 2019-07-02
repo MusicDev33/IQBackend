@@ -90,23 +90,23 @@ router.post('/authenticate', (req, res, next) => {
 
 // Welcome to callback hell. Woe to those who actually want to know what
 // in the world is going on here...
-router.post('/:userid/subjects/add', (req, res, next) => {
+router.post('/:userid/subjects/:subject', (req, res, next) => {
   User.getUserById(req.params.userid, (err, user) => {
     if (err) throw err;
     if (user){
-      Subject.findOne({name: req.body.subject}, (err, subject) => {
+      Subject.findOne({name: req.params.subject}, (err, subject) => {
         if (err) throw err;
         if (subject){
           var subjectFollowerCount = subject.followers
-          if (user.currentTopics.includes(req.body.subject)){
+          if (user.currentTopics.includes(req.params.subject)){
             res.json({success: false, msg: "Already subscribed to that subject."})
           }else{
             var subjectArray = user.currentTopics
-            subjectArray.push(req.body.subject)
+            subjectArray.push(req.params.subject)
             User.addSubject(subjectArray, req.params.userid, (err, updatedUser) => {
               if(updatedUser){
                 subjectFollowerCount += 1;
-                Subject.addFollower(req.body.subject, subjectFollowerCount, (err, updatedSubject) => {
+                Subject.addFollower(req.params.subject, subjectFollowerCount, (err, updatedSubject) => {
                   if (updatedSubject){
                     res.json({success: true,
                       msg: "Updated user and subject successfully!",
@@ -123,7 +123,7 @@ router.post('/:userid/subjects/add', (req, res, next) => {
           }
         }else{
           res.json({success: false,
-            msg: "Couldn't find subject '"+req.body.subject+"'.'"})
+            msg: "Couldn't find subject '"+req.params.subject+"'.'"})
         }
       })
     }else{
@@ -132,8 +132,14 @@ router.post('/:userid/subjects/add', (req, res, next) => {
   })
 });
 
-router.put('/:userid/subjects/remove', (req, res, next) => {
-  
+router.delete('/:userid/subjects/:subject', (req, res, next) => {
+  User.removeSubject(req.params.userid, req.params.subject, (err, user) => {
+    if (user){
+      res.json({success: true, user: user});
+    }else{
+      res.json({success: false, msg: "Failed for one of many reasons."})
+    }
+  })
 })
 
 

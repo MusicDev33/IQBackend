@@ -83,6 +83,32 @@ module.exports.addSubject = function(subjectArray, userid, callback){
     })
 }
 
+module.exports.removeSubject = function(userid, subject, callback){
+  User.findOne({_id: userid}, (err, user) => {
+    if (err) throw err;
+    if (user){
+      if (!user.currentTopics.includes(subject)){
+        return callback(null, null)
+      }else{
+        var userSubjects = user.currentTopics;
+        userSubjects.splice(user.currentTopics.indexOf(subject), 1);
+        User.findOneAndUpdate(
+          {_id: userid},
+          {currentTopics: userSubjects}, {new: true}, (err, updatedUser) => {
+            if (err) throw err;
+            if (updatedUser){
+              return callback(null, updatedUser);
+            }else{
+              return callback(null, null)
+            }
+          })
+      }
+    }else{
+      return callback(null, null);
+    }
+  })
+}
+
 module.exports.addUser = function(newUser, callback){
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
