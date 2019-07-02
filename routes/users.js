@@ -135,7 +135,13 @@ router.post('/:userid/subjects/:subject', (req, res, next) => {
 router.delete('/:userid/subjects/:subject', (req, res, next) => {
   User.removeSubject(req.params.userid, req.params.subject, (err, user) => {
     if (user){
-      res.json({success: true, user: user});
+      Subject.removeFollower(req.params.subject, (err, subject) => {
+        if (subject){
+          res.json({success: true, user: user});
+        }else{
+          res.json({success: true, user: user, msg: "Couldn't update follower count."})
+        }
+      })
     }else{
       res.json({success: false, msg: "Failed for one of many reasons."})
     }

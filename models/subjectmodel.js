@@ -54,6 +54,26 @@ module.exports.addFollower = function(subject, newCount, callback){
   })
 }
 
+module.exports.removeFollower = function(subjectName, callback){
+  Subject.findOne({name: subjectName}, (err, subject) => {
+    if (err) throw err;
+    if (subject){
+      Subject.findOneAndUpdate({name: subject},
+        {followers: subject.followers - 1},
+        {new: true}, (err, updatedSubject) => {
+          if (err) throw err;
+          if (updatedSubject){
+            callback(null, updatedSubject);
+          }else{
+            callback(null, null)
+          }
+      })
+    }else{
+
+    }
+  })
+}
+
 module.exports.addSubject = function(subject, callback){
   subject.save(callback)
 }
