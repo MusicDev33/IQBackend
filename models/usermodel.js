@@ -39,6 +39,9 @@ const UserSchema = mongoose.Schema({
   },
   currentSubjects: {
     type: Array
+  },
+  profileHits: {
+    type: Number
   }
 });
 

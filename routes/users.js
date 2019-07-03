@@ -40,7 +40,8 @@ router.post('/register', (req, res, next) => {
             profileImage: "",
             customization: {},
             currentSubjects: [],
-            currentSources: []
+            currentSources: [],
+            profileHits: 0
           });
 
           User.addUser(newUser, (err, user) => {
@@ -88,49 +89,6 @@ router.post('/authenticate', (req, res, next) => {
 
   })
 });
-
-// Welcome to callback hell. Woe to those who actually want to know what
-// in the world is going on here...
-/*
-router.post('/:userid/subjects/:subject', (req, res, next) => {
-  User.getUserById(req.params.userid, (err, user) => {
-    if (user){
-      Subject.findByName(req.params.subject, (err, subject) => {
-        if (subject){
-          var subjectFollowerCount = subject.followers
-          if (user.currentSubjects.includes(req.params.subject)){
-            res.json({success: false, msg: "Already subscribed to that subject."})
-          }else{
-            var subjectArray = user.currentSubjects
-            subjectArray.push(req.params.subject)
-            User.addSubject(subjectArray, req.params.userid, (err, updatedUser) => {
-              if(updatedUser){
-                subjectFollowerCount += 1;
-                Subject.addFollower(req.params.subject, subjectFollowerCount, (err, updatedSubject) => {
-                  if (updatedSubject){
-                    res.json({success: true,
-                      msg: "Updated user and subject successfully!",
-                      updatedUser: updatedUser})
-                  }else{
-                    res.json({success: true, msg: "Something went wrong with this route. Tell Shelby ASAP."})
-                  }
-                })
-              }else{
-                res.json({success: false, msg: "Could not update user..."})
-              }
-            });
-
-          }
-        }else{
-          res.json({success: false,
-            msg: "Couldn't find subject '"+req.params.subject+"'.'"})
-        }
-      })
-    }else{
-      res.json({success: false, msg: "Couldn't find user."})
-    }
-  })
-});*/
 
 router.post('/:userid/subjects/:subjectname', (req, res, next) => {
   var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
