@@ -16,6 +16,8 @@ mongoose.connection.on('error', (err) => {
   console.log("Database error: " + err)
 })
 
+mongoose.set('useFindAndModify', false);
+
 const app = express();
 const port = 2999;
 

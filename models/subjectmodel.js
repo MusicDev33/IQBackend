@@ -41,7 +41,18 @@ module.exports.subjectNameToURL = function(subjectText){
   return urlText
 }
 
-module.exports.addFollower = function(subject, newCount, callback){
+module.exports.findByName = function(subject, callback){
+  Subject.findOne({name: subject}, (err, foundSubject) => {
+    if (err) throw err;
+    if (foundSubject){
+      callback(null, foundSubject)
+    }else{
+      callback(null, null)
+    }
+  })
+}
+
+module.exports.addFollower = function(subject, newCount, callback){ // poorly named...I know...
   Subject.findOneAndUpdate({name: subject},
     {followers: newCount},
     {new: true}, (err, updatedSubject) => {
@@ -58,18 +69,20 @@ module.exports.removeFollower = function(subjectName, callback){
   Subject.findOne({name: subjectName}, (err, subject) => {
     if (err) throw err;
     if (subject){
-      Subject.findOneAndUpdate({name: subject},
+      Subject.findOneAndUpdate({name: subject.name},
         {followers: subject.followers - 1},
         {new: true}, (err, updatedSubject) => {
           if (err) throw err;
           if (updatedSubject){
             callback(null, updatedSubject);
           }else{
+            console.log(1)
             callback(null, null)
           }
       })
     }else{
-
+      console.log(2)
+      callback(null, null)
     }
   })
 }

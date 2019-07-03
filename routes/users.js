@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const AutoRes = require('../RouteUtils/autores')
 const config = require('../config/database')
+const StringUtils = require('../ProtoChanges/string')
 
 //Register
 router.post('/register', (req, res, next) => {
@@ -90,12 +91,11 @@ router.post('/authenticate', (req, res, next) => {
 
 // Welcome to callback hell. Woe to those who actually want to know what
 // in the world is going on here...
+/*
 router.post('/:userid/subjects/:subject', (req, res, next) => {
   User.getUserById(req.params.userid, (err, user) => {
-    if (err) throw err;
     if (user){
-      Subject.findOne({name: req.params.subject}, (err, subject) => {
-        if (err) throw err;
+      Subject.findByName(req.params.subject, (err, subject) => {
         if (subject){
           var subjectFollowerCount = subject.followers
           if (user.currentSubjects.includes(req.params.subject)){
@@ -130,12 +130,36 @@ router.post('/:userid/subjects/:subject', (req, res, next) => {
       res.json({success: false, msg: "Couldn't find user."})
     }
   })
-});
+});*/
 
-router.delete('/:userid/subjects/:subject', (req, res, next) => {
-  User.removeSubject(req.params.userid, req.params.subject, (err, user) => {
+router.post('/:userid/subjects/:subjectname', (req, res, next) => {
+  var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
+  subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
+  Subject.findByName(subjectName, (err, subject) => {
+    if(subject){
+      User.addSubject(req.params.userid, subject.name, (err, updatedUser) => {
+        if (updatedUser){
+          Subject.addFollower(subject.name, subject.followers + 1, (err, updatedSubject) => {
+            if (updatedSubject){
+              res.json({success: true, subject: updatedSubject})
+            }else{
+              res.json({success: false, msg: "Something didn't happen...."})
+            }
+          })
+        }
+      })
+    }else{
+      return res.json({success: false, msg: "Couldn't find subject, make sure it exists!"})
+    }
+  })
+})
+
+router.delete('/:userid/subjects/:subjectname', (req, res, next) => {
+  var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
+  subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
+  User.removeSubject(req.params.userid, subjectName, (err, user) => {
     if (user){
-      Subject.removeFollower(req.params.subject, (err, subject) => {
+      Subject.removeFollower(subjectName, (err, subject) => {
         if (subject){
           res.json({success: true, user: user});
         }else{

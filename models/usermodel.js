@@ -45,7 +45,14 @@ const UserSchema = mongoose.Schema({
 const User = module.exports = mongoose.model('User', UserSchema);
 
 module.exports.getUserById = function(mongoID, callback){
-  User.findById(mongoID, callback);
+  User.findById(mongoID, (err, user) => {
+    if (err) throw err; // If I throw errors here, hopefully it'll clean up the route code
+    if (user){
+      return callback(null, user);
+    }else{
+      return callback(null, null);
+    }
+  });
 }
 
 module.exports.getUserByEmail = function(email, callback){
@@ -69,7 +76,7 @@ module.exports.getUserByHandle = function(handle, callback){
     }
   })
 }
-
+/*
 module.exports.addSubject = function(subjectArray, userid, callback){
   User.findOneAndUpdate(
     {_id: userid},
@@ -81,6 +88,24 @@ module.exports.addSubject = function(subjectArray, userid, callback){
         callback(null, null)
       }
     })
+}*/
+
+module.exports.addSubject = function(userid, subject, callback){
+  User.findById(userid, (err, user) => {
+    if (user){
+      if (!user.currentSubjects.includes(subject)){
+        user.currentSubjects.push(subject)
+        user.save((err, updatedUser) => {
+          if (err) throw err;
+          return callback(null, updatedUser)
+        })
+      }else{
+        return callback(null, null)
+      }
+    }else{
+      return callback(null, null)
+    }
+  })
 }
 
 module.exports.removeSubject = function(userid, subject, callback){
@@ -88,6 +113,7 @@ module.exports.removeSubject = function(userid, subject, callback){
     if (err) throw err;
     if (user){
       if (!user.currentSubjects.includes(subject)){
+        console.log("1")
         return callback(null, null)
       }else{
         var userSubjects = user.currentSubjects;
@@ -99,11 +125,13 @@ module.exports.removeSubject = function(userid, subject, callback){
             if (updatedUser){
               return callback(null, updatedUser);
             }else{
+              console.log("1")
               return callback(null, null)
             }
           })
       }
     }else{
+      console.log("1")
       return callback(null, null);
     }
   })
