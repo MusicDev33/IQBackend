@@ -13,6 +13,9 @@ const AnswerSchema = mongoose.Schema({
   posterID: {
     type: String
   },
+  posterHandle: {
+    type: String
+  },
   views: {
     type: String
   },

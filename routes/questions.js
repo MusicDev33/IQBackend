@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs')
 const AutoRes = require('../RouteUtils/autores')
 const config = require('../config/database')
 
-//Register
+// Find a way to make this :questionurl instead of /add
 router.post('/add', (req, res, next) => {
   var questionURL = Question.questionTextToURL(req.body.question);
   console.log("Got a question.");
@@ -24,7 +24,9 @@ router.post('/add', (req, res, next) => {
     asker: req.body.asker,
     askerID: req.body.askerID,
     votes: 1,
-    views: 1
+    views: 1,
+    details: "",
+    time: ""
   });
 
   Question.addQuestion(newQuestion, (err, question) => {
@@ -94,6 +96,7 @@ router.post('/:questionURL/answers/add', (req, res, next) => {
     views: 1,
     poster: req.body.poster,
     posterID: req.body.posterID,
+    posterHandle: req.posterHandle,
     questionText: req.body.questionText
   })
   Answer.addAnswer(answer, (err, savedAnswer) => {
