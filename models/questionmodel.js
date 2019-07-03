@@ -19,7 +19,7 @@ const QuestionSchema = mongoose.Schema({
   homeworkSource: {
     type: String
   },
-  view: {
+  views: {
     type: Number
   },
   votes: {
