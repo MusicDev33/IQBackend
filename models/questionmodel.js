@@ -19,6 +19,12 @@ const QuestionSchema = mongoose.Schema({
   homeworkSource: {
     type: String
   },
+  view: {
+    type: Number
+  },
+  votes: {
+    type: Number
+  }
   answers: {
     type: Array
   },

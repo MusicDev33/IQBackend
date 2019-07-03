@@ -22,7 +22,9 @@ router.post('/add', (req, res, next) => {
     subject: req.body.subject,
     homeworkSource: req.body.source,
     asker: req.body.asker,
-    askerID: req.body.askerID
+    askerID: req.body.askerID,
+    votes: 1,
+    views: 1
   });
 
   Question.addQuestion(newQuestion, (err, question) => {
@@ -36,7 +38,15 @@ router.get('/:questionURL', (req, res, next) => {
   Question.getQuestionByURL(req.params.questionURL, (err, question) => {
     if (err) throw err;
     if (question){
-      res.json({success: true, question: question});
+      question.views += 1
+      question.save( (err, updatedQuestion) => {
+        if (err) throw err;
+        if(updatedQuestion){
+          res.json({success: true, question: updatedQuestion});
+        }else{
+          res.json({success: false, msg: "Couldn't update question views."})
+        }
+      })
     }else{
       res.json({success: false, msg: "Couldn't get dat question, yo!"});
     }
@@ -49,7 +59,7 @@ router.get('/id/:questionid', (req, res, next) => {
     if (question){
       res.json({success: true, question: question});
     }else{
-      res.json({success: false, msg: "Couldn't get dat question by it's _id, yo!"});
+      res.json({success: false, msg: "Couldn't get dat question by its _id, yo!"});
     }
   })
 })
