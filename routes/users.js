@@ -38,7 +38,7 @@ router.post('/register', (req, res, next) => {
             password: req.body.password,
             profileImage: "",
             customization: {},
-            currentTopics: [],
+            currentSubjects: [],
             currentSources: []
           });
 
@@ -98,10 +98,10 @@ router.post('/:userid/subjects/:subject', (req, res, next) => {
         if (err) throw err;
         if (subject){
           var subjectFollowerCount = subject.followers
-          if (user.currentTopics.includes(req.params.subject)){
+          if (user.currentSubjects.includes(req.params.subject)){
             res.json({success: false, msg: "Already subscribed to that subject."})
           }else{
-            var subjectArray = user.currentTopics
+            var subjectArray = user.currentSubjects
             subjectArray.push(req.params.subject)
             User.addSubject(subjectArray, req.params.userid, (err, updatedUser) => {
               if(updatedUser){

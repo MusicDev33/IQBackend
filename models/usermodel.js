@@ -37,7 +37,7 @@ const UserSchema = mongoose.Schema({
   currentSources: {
     type: Array
   },
-  currentTopics: {
+  currentSubjects: {
     type: Array
   }
 });
@@ -73,7 +73,7 @@ module.exports.getUserByHandle = function(handle, callback){
 module.exports.addSubject = function(subjectArray, userid, callback){
   User.findOneAndUpdate(
     {_id: userid},
-    {currentTopics: subjectArray}, {new: true},(err, updatedUser) => {
+    {currentSubjects: subjectArray}, {new: true},(err, updatedUser) => {
       if (err) throw err;
       if (updatedUser){
         callback(null, updatedUser)
@@ -87,14 +87,14 @@ module.exports.removeSubject = function(userid, subject, callback){
   User.findOne({_id: userid}, (err, user) => {
     if (err) throw err;
     if (user){
-      if (!user.currentTopics.includes(subject)){
+      if (!user.currentSubjects.includes(subject)){
         return callback(null, null)
       }else{
-        var userSubjects = user.currentTopics;
-        userSubjects.splice(user.currentTopics.indexOf(subject), 1);
+        var userSubjects = user.currentSubjects;
+        userSubjects.splice(user.currentSubjects.indexOf(subject), 1);
         User.findOneAndUpdate(
           {_id: userid},
-          {currentTopics: userSubjects}, {new: true}, (err, updatedUser) => {
+          {currentSubjects: userSubjects}, {new: true}, (err, updatedUser) => {
             if (err) throw err;
             if (updatedUser){
               return callback(null, updatedUser);
