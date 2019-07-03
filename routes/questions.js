@@ -59,7 +59,15 @@ router.get('/id/:questionid', (req, res, next) => {
   Question.findOne({_id: req.params.id}, (err, question) => {
     if (err) throw err;
     if (question){
-      res.json({success: true, question: question});
+      question.views += 1
+      question.save( (err, updatedQuestion) => {
+        if (err) throw err;
+        if(updatedQuestion){
+          res.json({success: true, question: updatedQuestion});
+        }else{
+          res.json({success: false, msg: "Couldn't update question views."})
+        }
+      })
     }else{
       res.json({success: false, msg: "Couldn't get dat question by its _id, yo!"});
     }
@@ -96,7 +104,7 @@ router.post('/:questionURL/answers/add', (req, res, next) => {
     views: 1,
     poster: req.body.poster,
     posterID: req.body.posterID,
-    posterHandle: req.posterHandle,
+    posterHandle: req.body.posterHandle,
     questionText: req.body.questionText
   })
   Answer.addAnswer(answer, (err, savedAnswer) => {
