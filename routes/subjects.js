@@ -40,8 +40,10 @@ router.post('/:subjectname', (req, res, next) => {
   })
 });
 
-router.get('/:subjectname', (req, res, next) => {
-  Question.find({subject: req.params.subjectname}, (err, questions) => {
+router.get('/:subjectname/questions', (req, res, next) => {
+  var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
+  subjectName = subjectName.replace(/-/g, ' ');
+  Question.find({subject: subjectName}, (err, questions) => {
     if (err) throw err;
     if (questions.length){
       res.json({success: true, questions: questions});
@@ -52,7 +54,9 @@ router.get('/:subjectname', (req, res, next) => {
 });
 
 router.get('/:subjectname/count', (req, res, next) => {
-  Question.estimatedDocumentCount({subject: req.params.subjectname}, (err, count) => {
+  var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
+  subjectName = subjectName.replace(/-/g, ' ');
+  Question.estimatedDocumentCount({subject: subjectName}, (err, count) => {
     if (err) throw err;
     if (count){
       res.json({success: true, msg: "Question count successfully estimated.", count: count})
