@@ -12,16 +12,18 @@ const Subject = require('../models/subjectmodel')
 const StringUtils = require('../ProtoChanges/string')
 
 
-router.post('/add', (req, res, next) => {
-  var subjectURL = Subject.subjectNameToURL(StringUtils.titleCase(req.body.name.trim()))
+router.post('/:subjectname', (req, res, next) => {
+  var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
+  subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
+  var subjectURL = Subject.subjectNameToURL(subjectName)
   var newSubject = new Subject({
-    name: StringUtils.titleCase(req.body.name.trim()),
+    name: subjectName,
     followers: 0,
     subjectURL: subjectURL,
     views: 0
   })
 
-  Subject.findOne({name: req.body.name.trim()}, (err, subject) => {
+  Subject.findOne({name: subjectName}, (err, subject) => {
     if (err) throw err;
     if (!subject){
       Subject.addSubject(newSubject, (err, subject) => {
