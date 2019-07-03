@@ -9,12 +9,13 @@ const bcrypt = require('bcryptjs')
 const AutoRes = require('../RouteUtils/autores')
 const config = require('../config/database')
 const Subject = require('../models/subjectmodel')
+const StringUtils = require('../ProtoChanges/string')
 
 
 router.post('/add', (req, res, next) => {
-  var subjectURL = Subject.subjectNameToURL(req.body.name)
+  var subjectURL = Subject.subjectNameToURL(StringUtils.titleCase(req.body.name.trim()))
   var newSubject = new Subject({
-    name: req.body.name,
+    name: StringUtils.titleCase(req.body.name.trim()),
     followers: 0,
     subjectURL: subjectURL,
     views: 0
