@@ -23,6 +23,7 @@ router.post('/add', (req, res, next) => {
     homeworkSource: req.body.source,
     asker: req.body.asker,
     askerID: req.body.askerID,
+    askerHandle: req.body.askerHandle,
     votes: 1,
     views: 1,
     details: "",

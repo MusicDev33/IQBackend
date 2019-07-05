@@ -13,6 +13,9 @@ const QuestionSchema = mongoose.Schema({
   askerID: {
     type: String
   },
+  askerHandle: {
+    type: String
+  },
   subject: {
     type: String
   },
