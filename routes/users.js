@@ -136,16 +136,8 @@ router.get('/profile/:handle', (req, res, next) => {
   User.getUserByHandle(req.params.handle, (err, user) => {
     if (err) throw err;
     if (user){
-      var returnUser = new User({
-        _id: user._id,
-        name: user.name,
-        handle: user.handle,
-        profileImage: user.profileImage,
-        customization: user.customization,
-        credentials: user.credentials,
-        bio: user.bio
-      })
-      res.json({success: true, msg: "Successfully found user.", user: returnUser})
+      user.password = ""
+      res.json({success: true, msg: "Successfully found user.", user: user})
     }else{
       res.json({success: false, msg: "Couldn't find user by handle."})
     }
@@ -177,6 +169,7 @@ router.get('/:userid/answers', (req, res, next) => {
 });
 
 router.get('/profile', passport.authenticate('jwt', {session:false}),(req, res, next) => {
+  req.user.password = ""
   res.json({user: req.user})
 })
 
