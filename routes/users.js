@@ -10,6 +10,7 @@ const bcrypt = require('bcryptjs')
 const AutoRes = require('../RouteUtils/autores')
 const config = require('../config/database')
 const StringUtils = require('../ProtoChanges/string')
+const Location = require('../models/locationmodel')
 
 //Register
 router.post('/register', (req, res, next) => {
@@ -171,6 +172,30 @@ router.get('/:userid/answers', (req, res, next) => {
 router.get('/profile', passport.authenticate('jwt', {session:false}),(req, res, next) => {
   req.user.password = ""
   res.json({user: req.user})
+})
+
+router.post('/location/add', (req, res, next) => {
+  const newLocation = new Location({
+    city: req.body.city,
+    continent_code: req.body.continent_code,
+    continent_name: req.body.continent_name,
+    country_code: req.body.country_code,
+    country_name: req.body.country_name,
+    ip: req.body.ip,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+    region_code: req.body.region_code,
+    region_name: req.body.region_name,
+    zip: req.body.zip
+  })
+  Location.addLocation(newLocation, (err, location) => {
+    if (err) throw err;
+    if (location){
+      res.json({success: true, msg: "Anonymous location data sent."})
+    }else{
+      res.json({success: false, msg: "Couldn't collect anonymous location data."})
+    }
+  })
 })
 
 module.exports = router;
