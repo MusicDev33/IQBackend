@@ -5,6 +5,13 @@ const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const config = require('./config/database')
+const fs = require('fs');
+const https = require('https')
+
+var privateKey  = fs.readFileSync('/etc/letsencrypt/live/inquantir.com/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('/etc/letsencrypt/live/inquantir.com/cert.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
 
 mongoose.connect(config.database);
 
@@ -41,18 +48,20 @@ const questions = require('./routes/questions');
 const subjects = require('./routes/subjects');
 const sources = require('./routes/sources');
 
-app.use('/api/v1/users', users);
-app.use('/api/v1/questions', questions);
-app.use('/api/v1/subjects', subjects);
-app.use('/api/v1/sources', sources);
+app.use('/v1/users', users);
+app.use('/v1/questions', questions);
+app.use('/v1/subjects', subjects);
+app.use('/v1/sources', sources);
 
 // create public folder with the index.html when finished
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
-  res.send(" No Endpoint.")
+  res.send("404 Error")
 })
 
-app.listen(port, () => {
+var httpsServer = https.createServer(credentials, app);
+
+app.listen(2999, () => {
   console.log("Inquantir Backend started!")
 })
