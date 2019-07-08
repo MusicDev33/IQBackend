@@ -185,7 +185,7 @@ router.post('/location/add', (req, res, next) => {
     latitude: req.body.latitude,
     longitude: req.body.longitude,
     region_code: req.body.region_code,
-    region_name: req.body.region_name,
+    region_name: req.body.region,
     zip: req.body.zip
   })
   Location.addLocation(newLocation, (err, location) => {
