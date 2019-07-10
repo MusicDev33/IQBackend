@@ -61,6 +61,28 @@ module.exports.getAnswersByQuestionURL = function(questionURL, callback){
   })
 }
 
+module.exports.adjustVotes = function(answerID, newVote, oldVote, callback){
+  Answer.findOne({_id: answerID}, (err, answer) => {
+    if (err) throw err;
+    if (answer){
+      answer.votes += newVote;
+      if (oldVote){
+        answer.votes -= oldVote;
+      }
+      answer.save( (err, updatedAnswer) => {
+        if (err) throw err;
+        if (updatedAnswer){
+          callback(null, updatedAnswer)
+        }else{
+          callback(null, null)
+        }
+      })
+    }else{
+      callback(null, null)
+    }
+  })
+}
+
 module.exports.addAnswer = function(answer, callback){
   answer.save(callback)
 }
