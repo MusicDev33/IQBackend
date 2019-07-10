@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const AutoRes = require('../RouteUtils/autores')
 const config = require('../config/database')
+const Vote = require('../models/votemodel')
 
 // Find a way to make this :questionurl instead of /add
 router.post('/add', (req, res, next) => {
@@ -35,6 +36,18 @@ router.post('/add', (req, res, next) => {
     res.json(AutoRes.AutoResC2(err, question, messages));
   });
 });
+
+router.post("/newvote/:userid/:answerid", (req, res, next) => {
+  Vote.addVote(req.params.userid, req.params.answerid, 1, (err, newVote, oldVote) => {
+    Answer.adjustVotes(req.params.answerid, newVote, oldVote, (err, newAnswer) => {
+      if (newAnswer){
+        res.json({success: true, msg: "Voted successfully!"})
+      }else{
+        res.json({success: false, msg: "Vote failed..."})
+      }
+    })
+  })
+})
 
 router.get('/:questionURL', (req, res, next) => {
   console.log(req.params.questionURL)
