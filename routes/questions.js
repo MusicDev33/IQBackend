@@ -37,8 +37,8 @@ router.post('/add', (req, res, next) => {
   });
 });
 
-router.post("/newvote/:userid/:answerid", (req, res, next) => {
-  Vote.addVote(req.params.userid, req.params.answerid, 1, (err, newVote, oldVote) => {
+router.post("/:userid/:answerid/votes/:vote", (req, res, next) => {
+  Vote.addVote(req.params.userid, req.params.answerid, req.params.vote, (err, newVote, oldVote) => {
     Answer.adjustVotes(req.params.answerid, newVote, oldVote, (err, newAnswer) => {
       if (newAnswer){
         res.json({success: true, msg: "Voted successfully!"})
