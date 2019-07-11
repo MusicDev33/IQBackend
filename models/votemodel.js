@@ -18,17 +18,18 @@ const Vote = module.exports = mongoose.model('Vote', VoteSchema);
 // TODO: Clean this shit up, just wow.
 // This is awful. Someone needs to fire me.
 module.exports.addVote = function(userID, answerID, voteInt, callback){
-  Vote.findOne({userid: userID, answerid: answerID}, (err, vote) => {
+  Vote.findOne({userid: userID, answerid: answerID}, (err, oldVote) => {
     if (err) throw err;
-    if (vote){
-      if (vote.vote === voteInt){
+    if (oldVote){
+      console.log("Vote", oldVote.vote)
+      if (oldVote.vote === voteInt){
         callback(null, null, null)
       }else{
         Vote.findOneAndUpdate({userid: userID, answerid: answerID},
-          {vote: voteInt}, (err, updatedVote) => {
+          {vote: voteInt}, {new: true}, (err, updatedVote) => {
             if (err) throw err;
             if (updatedVote){
-              callback(null, vote, updatedVote)
+              callback(null, updatedVote.vote, oldVote.vote)
             }else{
               callback(null, null, null)
             }
@@ -43,9 +44,9 @@ module.exports.addVote = function(userID, answerID, voteInt, callback){
       newVote.save( (err, savedVote) => {
         if (err) throw err;
         if (savedVote){
-          callback(null, savedVote)
+          callback(null, savedVote.vote, null)
         }else{
-          callback(null, null)
+          callback(null, null, null)
         }
       })
     }

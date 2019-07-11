@@ -51,7 +51,7 @@ module.exports.getAnswerByPoster = function(poster, callback){
 }
 
 module.exports.getAnswersByQuestionURL = function(questionURL, callback){
-  Answer.find({questionURL: questionURL}).sort({votes: 1}).exec(function(err, docs){
+  Answer.find({questionURL: questionURL}).sort({votes: -1}).exec(function(err, docs){
     if (err) throw err;
     if (docs){
       callback(null, docs);
@@ -65,6 +65,9 @@ module.exports.adjustVotes = function(answerID, newVote, oldVote, callback){
   Answer.findOne({_id: answerID}, (err, answer) => {
     if (err) throw err;
     if (answer){
+      console.log("Answer found")
+      console.log("NEW:", newVote)
+      console.log("OLD:", oldVote)
       answer.votes += newVote;
       if (oldVote){
         answer.votes -= oldVote;
@@ -78,6 +81,7 @@ module.exports.adjustVotes = function(answerID, newVote, oldVote, callback){
         }
       })
     }else{
+      console.log("Answer not found")
       callback(null, null)
     }
   })
