@@ -9,6 +9,9 @@ const VoteSchema = mongoose.Schema({
   },
   answerid: {
     type: String
+  },
+  id: {
+    type: String
   }
 });
 
@@ -17,7 +20,7 @@ const Vote = module.exports = mongoose.model('Vote', VoteSchema);
 // Send callback as err, savedObject, oldObject...msg maybe?
 // TODO: Clean this shit up, just wow.
 // This is awful. Someone needs to fire me.
-module.exports.addVote = function(userID, answerID, voteInt, callback){
+module.exports.addVote = function(userID, answerID, voteInt, questionID, callback){
   Vote.findOne({userid: userID, answerid: answerID}, (err, oldVote) => {
     if (err) throw err;
     if (oldVote){

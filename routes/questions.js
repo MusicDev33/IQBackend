@@ -38,6 +38,9 @@ router.post('/add', (req, res, next) => {
 });
 
 router.post("/:userid/:answerid/votes/:vote", (req, res, next) => {
+  // VoteID = questionID:answerID
+  // Just gotta parse that bitch up and boom
+  // You got a cool thing happening and stuff
   Vote.addVote(req.params.userid, req.params.answerid, Number(req.params.vote), (err, newVote, oldVote) => {
     console.log(req.params.vote)
     console.log(newVote)
@@ -111,6 +114,10 @@ router.get('/:questionURL/answers', (req, res, next) => {
       res.json({success: false, msg: "Couldn't find any answers, maybe go write one!"})
     }
   })
+})
+
+router.get('/:questionURL/answers/upvotes/:userid', (req, res, next) => {
+  Vote.find({})
 })
 
 router.post('/:questionURL/answers/add', (req, res, next) => {
