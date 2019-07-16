@@ -38,9 +38,6 @@ router.post('/add', (req, res, next) => {
 });
 
 router.post("/:questionid/:userid/:answerid/votes/:vote", (req, res, next) => {
-  // VoteID = questionID:answerID
-  // Just gotta parse that bitch up and boom
-  // You got a cool thing happening and stuff
   Vote.addVote(req.params.userid, req.params.answerid, Number(req.params.vote), req.params.questionid, (err, newVote, oldVote) => {
     console.log(req.params.vote)
     console.log(newVote)
