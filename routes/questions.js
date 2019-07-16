@@ -37,11 +37,12 @@ router.post('/add', (req, res, next) => {
   });
 });
 
-router.post("/:userid/:answerid/votes/:vote", (req, res, next) => {
+router.post("/:questionid/:userid/:answerid/votes/:vote", (req, res, next) => {
   // VoteID = questionID:answerID
   // Just gotta parse that bitch up and boom
   // You got a cool thing happening and stuff
-  Vote.addVote(req.params.userid, req.params.answerid, Number(req.params.vote), (err, newVote, oldVote) => {
+  var voteId = req.params.questionid + ":" + req.params.answerid
+  Vote.addVote(req.params.userid, req.params.answerid, Number(req.params.vote), voteId, (err, newVote, oldVote) => {
     console.log(req.params.vote)
     console.log(newVote)
     console.log("Old:", oldVote)
@@ -76,7 +77,7 @@ router.get('/:questionURL', (req, res, next) => {
 })
 
 router.get('/id/:questionid', (req, res, next) => {
-  Question.findOne({_id: req.params.id}, (err, question) => {
+  Question.findOne({_id: req.params.questionid}, (err, question) => {
     if (err) throw err;
     if (question){
       question.views += 1
