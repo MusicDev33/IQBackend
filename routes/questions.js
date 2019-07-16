@@ -39,9 +39,6 @@ router.post('/add', (req, res, next) => {
 
 router.post("/:questionid/:userid/:answerid/votes/:vote", (req, res, next) => {
   Vote.addVote(req.params.userid, req.params.answerid, Number(req.params.vote), req.params.questionid, (err, newVote, oldVote) => {
-    console.log(req.params.vote)
-    console.log(newVote)
-    console.log("Old:", oldVote)
     Answer.adjustVotes(req.params.answerid, newVote, oldVote, (err, newAnswer) => {
       if (newAnswer){
         res.json({success: true, msg: "Voted successfully!"})
