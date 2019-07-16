@@ -41,8 +41,7 @@ router.post("/:questionid/:userid/:answerid/votes/:vote", (req, res, next) => {
   // VoteID = questionID:answerID
   // Just gotta parse that bitch up and boom
   // You got a cool thing happening and stuff
-  var voteId = req.params.questionid + ":" + req.params.answerid
-  Vote.addVote(req.params.userid, req.params.answerid, Number(req.params.vote), voteId, (err, newVote, oldVote) => {
+  Vote.addVote(req.params.userid, req.params.answerid, Number(req.params.vote), req.params.questionid, (err, newVote, oldVote) => {
     console.log(req.params.vote)
     console.log(newVote)
     console.log("Old:", oldVote)
