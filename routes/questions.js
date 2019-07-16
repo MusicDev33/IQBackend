@@ -110,8 +110,15 @@ router.get('/:questionURL/answers', (req, res, next) => {
   })
 })
 
-router.get('/:questionURL/answers/upvotes/:userid', (req, res, next) => {
-  Vote.find({})
+router.get('/:questionid/answers/upvotes/:userid', (req, res, next) => {
+  Vote.find({questionid: req.params.questionid, userid: req.params.userid}, (err, votes) => {
+    if (err) throw err;
+    if (votes.length){
+      res.json({success: true, votes: votes})
+    }else{
+      res.json({success: false, msg: "Could not get votes from questionid"})
+    }
+  })
 })
 
 router.post('/:questionURL/answers/add', (req, res, next) => {
