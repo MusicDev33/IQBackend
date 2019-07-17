@@ -110,7 +110,7 @@ router.get('/:questionURL/answers', (req, res, next) => {
   })
 })
 
-router.get('/:questionid/answers/upvotes/:userid', (req, res, next) => {
+router.get('/:questionid/answers/votes/:userid', (req, res, next) => {
   Vote.find({questionid: req.params.questionid, userid: req.params.userid}, (err, votes) => {
     if (err) throw err;
     if (votes.length){
