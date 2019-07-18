@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const config = require('./config/database')
 const fs = require('fs');
 const https = require('https')
+const helmet = require('helmet')
 
 var privateKey  = fs.readFileSync('/etc/letsencrypt/live/inquantir.com/privkey.pem', 'utf8');
 var certificate = fs.readFileSync('/etc/letsencrypt/live/inquantir.com/cert.pem', 'utf8');
@@ -27,6 +28,9 @@ mongoose.set('useFindAndModify', false);
 
 const app = express();
 const port = 2999;
+
+app.use(helmet())
+app.disable('x-powered-by')
 
 // Allows other domains to use this domain as an API
 app.use(cors());
