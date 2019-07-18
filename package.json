@@ -8,14 +8,15 @@
     "start": "node app"
   },
   "dependencies": {
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "cors": "*",
     "express": "*",
-    "mongoose":"*",
-    "bcryptjs":"*",
-    "cors":"*",
-    "jsonwebtoken":"*",
-    "body-parser":"*",
-    "passport-jwt":"*",
-    "passport":"*"
+    "helmet": "^3.19.0",
+    "jsonwebtoken": "*",
+    "mongoose": "*",
+    "passport": "*",
+    "passport-jwt": "*"
   },
   "author": "Shelby McCowan",
   "license": "ISC"
