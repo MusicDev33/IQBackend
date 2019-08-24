@@ -64,5 +64,15 @@ router.get('/:subjectname/count', (req, res, next) => {
   })
 })
 
+router.get('/', (req, res, next) => {
+  Subject.find({}, (err, subjects) => {
+    if (err) throw err;
+    if (subjects.length) {
+      res.json({success: true, subjects: subjects})
+    } else {
+      res.json({success: false, msg: 'Couldn\'t find any subjects.'})
+    }
+  })
+})
 
 module.exports = router;

@@ -9,10 +9,18 @@ const fs = require('fs');
 const https = require('https')
 const helmet = require('helmet')
 
-var privateKey  = fs.readFileSync('/etc/letsencrypt/live/inquantir.com/privkey.pem', 'utf8');
-var certificate = fs.readFileSync('/etc/letsencrypt/live/inquantir.com/cert.pem', 'utf8');
+let apiBase = '';
 
-var credentials = {key: privateKey, cert: certificate};
+if (process.env.NODE_ENV === 'production') {
+  var privateKey  = fs.readFileSync('/etc/letsencrypt/live/inquantir.com/privkey.pem', 'utf8');
+  var certificate = fs.readFileSync('/etc/letsencrypt/live/inquantir.com/cert.pem', 'utf8');
+
+  var credentials = {key: privateKey, cert: certificate};
+
+  apiBase = '/v1/';
+} else {
+  apiBase = '/api/v1/';
+}
 
 mongoose.connect(config.database);
 
@@ -52,10 +60,10 @@ const questions = require('./routes/questions');
 const subjects = require('./routes/subjects');
 const sources = require('./routes/sources');
 
-app.use('/v1/users', users);
-app.use('/v1/questions', questions);
-app.use('/v1/subjects', subjects);
-app.use('/v1/sources', sources);
+app.use(apiBase + 'users', users);
+app.use(apiBase + 'questions', questions);
+app.use(apiBase + 'subjects', subjects);
+app.use(apiBase + 'sources', sources);
 
 // create public folder with the index.html when finished
 app.use(express.static(path.join(__dirname, 'public')))
@@ -64,7 +72,9 @@ app.get('/', (req, res) => {
   res.send("404 Error")
 })
 
-var httpsServer = https.createServer(credentials, app);
+if (process.env.NODE_ENV === 'production') {
+  var httpsServer = https.createServer(credentials, app)
+}
 
 app.listen(2999, () => {
   console.log("Inquantir Backend started!")
