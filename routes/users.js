@@ -91,6 +91,7 @@ router.post('/authenticate', (req, res, next) => {
   })
 });
 
+// User follows subject
 router.post('/:userid/subjects/:subjectname', (req, res, next) => {
   var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
@@ -111,8 +112,9 @@ router.post('/:userid/subjects/:subjectname', (req, res, next) => {
       return res.json({success: false, msg: "Couldn't find subject, make sure it exists!"})
     }
   })
-})
+});
 
+// User unfollows subject
 router.delete('/:userid/subjects/:subjectname', (req, res, next) => {
   var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
@@ -172,7 +174,7 @@ router.get('/:userid/answers', (req, res, next) => {
 router.get('/profile', passport.authenticate('jwt', {session:false}),(req, res, next) => {
   req.user.password = ""
   res.json({user: req.user})
-})
+});
 
 router.post('/location/add', (req, res, next) => {
   const newLocation = new Location({
@@ -196,6 +198,6 @@ router.post('/location/add', (req, res, next) => {
       res.json({success: false, msg: "Couldn't collect anonymous location data."})
     }
   })
-})
+});
 
 module.exports = router;
