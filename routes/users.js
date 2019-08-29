@@ -93,6 +93,7 @@ router.post('/authenticate', (req, res, next) => {
 
 // User follows subject
 router.post('/:userid/subjects/:subjectname', (req, res, next) => {
+  console.log("Log")
   var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
   Subject.findByName(subjectName, (err, subject) => {

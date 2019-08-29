@@ -10,6 +10,24 @@ const AutoRes = require('../RouteUtils/autores')
 const config = require('../config/database')
 const Source = require('../models/sourcemodel')
 
+router.post('add', (req, res, next) => {
+  const body = req.body;
+  const newSource = new Source({
+    name: body.name,
+    follower: 0,
+    posterID: body.posterID,
+    views: 0,
+    sourceURL: '', // Use a function to create this
+    tags: []
+  })
 
+  Source.saveSource(newSource, (err, savedSource) => {
+    if (savedSource) {
+      res.json({success: true, msg: 'Successfully saved source!'});
+    } else {
+      res.json({success: false, msg: 'Couldn\t save source.'})
+    }
+  })
+})
 
 module.exports = router;

@@ -27,5 +27,12 @@ const SourceSchema = mongoose.Schema({
 const Source = module.exports = mongoose.model('Source', SourceSchema);
 
 module.exports.saveSource = function(source, callback) {
-  source.save(callback);
+  source.save((err, savedSource) => {
+    if (err) throw err;
+    if (savedSource) {
+      callback(null, savedSource);
+    } else {
+      callback(null, null);
+    }
+  });
 }

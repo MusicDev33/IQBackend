@@ -52,7 +52,7 @@ module.exports.getUserById = function(mongoID, callback){
     if (err) throw err; // If I throw errors here, hopefully it'll clean up the route code
     if (user){
       return callback(null, user);
-    }else{
+    } else {
       return callback(null, null);
     }
   });
