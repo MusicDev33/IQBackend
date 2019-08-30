@@ -21,6 +21,9 @@ const SourceSchema = mongoose.Schema({
   },
   tags: {
     type: Array
+  },
+  edition: {
+    type: Number
   }
 });
 
@@ -35,4 +38,20 @@ module.exports.saveSource = function(source, callback) {
       callback(null, null);
     }
   });
+}
+
+module.exports.sourceTextToURL = function(sourceText) {
+  var urlText = ""
+  var specialChars = "!@#$%^&*()>< '"
+
+  for (var i = 0; i < sourceText.length; i++) {
+    if (specialChars.indexOf(sourceText[i]) > -1) {
+      urlText += "-"
+    } else if (sourceText[i] == "?"){
+
+    } else {
+      urlText += sourceText[i]
+    }
+  }
+  return urlText
 }

@@ -17,8 +17,9 @@ router.post('add', (req, res, next) => {
     follower: 0,
     posterID: body.posterID,
     views: 0,
-    sourceURL: '', // Use a function to create this
-    tags: []
+    sourceURL: Source.sourceTextToURL(body.name), // Use a function to create this
+    tags: [],
+    edition: body.edition
   })
 
   Source.saveSource(newSource, (err, savedSource) => {
@@ -27,7 +28,11 @@ router.post('add', (req, res, next) => {
     } else {
       res.json({success: false, msg: 'Couldn\t save source.'})
     }
-  })
+  });
+});
+
+router.delete(':sourcetext', (req, res, next) => {
+  
 })
 
 module.exports = router;

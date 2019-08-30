@@ -43,7 +43,6 @@ const Question = module.exports = mongoose.model('Question', QuestionSchema);
 
 module.exports.questionTextToURL = function(questionText){
   var urlText = ""
-  var questionText = questionText
   var specialChars = "!@#$%^&*()>< '"
 
   for (var i = 0; i < questionText.length; i++) {
@@ -70,6 +69,6 @@ module.exports.getQuestionByURL = function(qURL, callback){
 }
 
 module.exports.addQuestion = function(question, callback){
-  //source is the source of the homework question, like Mastering Physics or ALEKS
+  // source is the source of the homework question, like Mastering Physics or ALEKS
   question.save(callback)
 }

@@ -54,6 +54,19 @@ app.use(passport.session())
 
 require('./config/passport')(passport)
 
+const acceptedAgents = ['IQAPIv1', 'IQiOSv1', 'IQAndroidv1']
+
+// Check IQ-User-Agent
+const checkAgent = function(req, res, next) {
+  if (!acceptedAgents.includes(req.header('IQ-User-Agent'))) {
+    res.redirect('/')
+  } else {
+    next()
+  }
+}
+
+app.use(checkAgent);
+
 // Routes
 const users = require('./routes/users');
 const questions = require('./routes/questions');
