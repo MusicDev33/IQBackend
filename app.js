@@ -59,7 +59,7 @@ const acceptedAgents = ['IQAPIv1', 'IQiOSv1', 'IQAndroidv1']
 // Check IQ-User-Agent
 const checkAgent = function(req, res, next) {
   if (!acceptedAgents.includes(req.header('IQ-User-Agent'))) {
-    res.redirect('/')
+    res.redirect(apiBase + '/')
   } else {
     next()
   }
@@ -81,7 +81,7 @@ app.use(apiBase + 'sources/', sources);
 // create public folder with the index.html when finished
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.get('/', (req, res) => {
+app.get(apiBase + '/', (req, res) => {
   res.send("404 Error")
 })
 
