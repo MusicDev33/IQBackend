@@ -26,12 +26,22 @@ router.post('add', (req, res, next) => {
     if (savedSource) {
       res.json({success: true, msg: 'Successfully saved source!'});
     } else {
-      res.json({success: false, msg: 'Couldn\t save source.'})
+      res.json({success: false, msg: 'Couldn\'t save source.'})
     }
   });
 });
 
-router.delete(':sourcetext', (req, res, next) => {
+router.delete(':sourceurl', (req, res, next) => {
+  Source.deleteSource(req.params.sourceurl, (err, deletedSource) => {
+    if (deletedSource) {
+      res.json({success: true, msg: 'Source deleted successfully!'})
+    } else {
+      res.json({success: false, msg: 'Source couldn\'t be deleted...'})
+    }
+  });
+});
+
+router.put(':sourceurl/tag/:tagname', (req, res, next) => {
   
 })
 
