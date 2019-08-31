@@ -16,7 +16,7 @@ const rateLimit = require('express-rate-limit');
 //Register
 const accountLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour window
-  max: 100, // start blocking after 5 requests
+  max: 10, // start blocking after 5 requests
   message:
     "Too many accounts created from this IP, please try again after an hour"
 });
@@ -65,7 +65,7 @@ router.post('/register', accountLimiter, (req, res, next) => {
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // start blocking after 5 requests
+  max: 10, // start blocking after 10 requests
   message:
     "Too many login attempts have been made"
 });
