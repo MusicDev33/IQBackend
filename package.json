@@ -1,22 +1,23 @@
 {
   "name": "iqbackend",
   "version": "0.1.0",
-  "description": "Inquantir backend",
+  "description": "Inquantir Backend",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app"
   },
   "dependencies": {
-    "bcryptjs": "*",
-    "body-parser": "*",
-    "cors": "*",
-    "express": "*",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "helmet": "^3.19.0",
-    "jsonwebtoken": "*",
-    "mongoose": "*",
-    "passport": "*",
-    "passport-jwt": "*"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.11",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "rate-limiter-flexible": "^1.1.1"
   },
   "author": "Shelby McCowan",
   "license": "ISC"
