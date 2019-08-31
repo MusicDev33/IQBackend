@@ -73,7 +73,7 @@ const loginLimiter = rateLimit({
 router.post('/authenticate', loginLimiter, (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password
-
+  console.log(req.ip)
   User.getUserByEmail(email, (err, user) => {
     if (err) throw err;
     if (!user){
