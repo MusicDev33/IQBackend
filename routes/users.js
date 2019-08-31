@@ -11,9 +11,17 @@ const AutoRes = require('../RouteUtils/autores')
 const config = require('../config/database')
 const StringUtils = require('../ProtoChanges/string')
 const Location = require('../models/locationmodel')
+const rateLimit = require('express-rate-limit');
 
 //Register
-router.post('/register', (req, res, next) => {
+const accountLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour window
+  max: 5, // start blocking after 5 requests
+  message:
+    "Too many accounts created from this IP, please try again after an hour"
+});
+
+router.post('/register', accountLimiter, (req, res, next) => {
   // Ugh, nested ifs AND callbacks. Can you think of anything worse?
   // P.S. Maybe I just suck at writing decent code...
 
@@ -55,7 +63,14 @@ router.post('/register', (req, res, next) => {
   })
 });
 
-router.post('/authenticate', (req, res, next) => {
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // start blocking after 5 requests
+  message:
+    "Too many login attempts have been made"
+});
+
+router.post('/authenticate', loginLimiter, (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password
 

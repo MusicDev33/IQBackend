@@ -6,8 +6,8 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const config = require('./config/database')
 const fs = require('fs');
-const https = require('https')
-const helmet = require('helmet')
+const https = require('https');
+const helmet = require('helmet');
 
 let apiBase = '';
 
@@ -34,11 +34,13 @@ mongoose.connection.on('error', (err) => {
 
 mongoose.set('useFindAndModify', false);
 
+// Rest of the app
 const app = express();
 const port = 2999;
 
-app.use(helmet())
-app.disable('x-powered-by')
+app.use(helmet());
+app.disable('x-powered-by');
+app.set('trust proxy', 1);
 
 // Allows other domains to use this domain as an API
 app.use(cors());
