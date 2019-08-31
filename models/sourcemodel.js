@@ -29,13 +29,13 @@ const SourceSchema = mongoose.Schema({
 
 const Source = module.exports = mongoose.model('Source', SourceSchema);
 
-module.exports.addTag = function(sourceURL, tagName, callback) {
-  Source.findOne({sourceURL: sourceURL}, (err, source) => {
-    if (err) throw err:
+module.exports.addTag = function(sourceID, tagName, callback) {
+  const id = mongoose.Types.ObjectId(sourceID);
+  Source.findById(id, (err, source) => {
+    if (err) throw err;
     if (source) {
-      // FIX THIS
-      if (source.tags.includes(tagName)) {
-        source.tags.append(tagName);
+      if (!source.tags.includes(tagName)) {
+        source.tags.push(tagName);
         source.save((err, newSource) => {
           if (err) throw err;
           if (newSource) {
@@ -53,6 +53,28 @@ module.exports.addTag = function(sourceURL, tagName, callback) {
   })
 }
 
+// Keep an eye on performance.
+module.exports.removeTag = function(sourceID, tagName, callback) {
+  const id = mongoose.Types.ObjectId(sourceID);
+  Source.findById(id, (err, source) => {
+    if (err) throw err;
+    if (source) {
+      console.log(source)
+      source.tags = source.tags.filter(tag => tag !== tagName);
+      source.save((err, newSource) => {
+        if (err) throw err;
+        if (newSource) {
+          callback(null, newSource);
+        } else {
+          callback(null, null);
+        }
+      })
+    } else {
+      callback(null, null);
+    }
+  })
+}
+
 module.exports.saveSource = function(source, callback) {
   source.save((err, savedSource) => {
     if (err) throw err;
@@ -64,8 +86,9 @@ module.exports.saveSource = function(source, callback) {
   });
 }
 
-module.exports.deleteSource = function(sourceURL, callback) {
-  Source.findOneAndDelete({sourceURL: sourceURL}, (err, deletedSource) => {
+module.exports.deleteSource = function(sourceID, callback) {
+  const id = mongoose.Types.ObjectId(sourceID);
+  Source.findByIdAndRemove(id, (err, deletedSource) => {
     if (err) throw err;
     if (deletedSource) {
       callback(null, deletedSource);

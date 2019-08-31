@@ -10,7 +10,14 @@ const AutoRes = require('../RouteUtils/autores')
 const config = require('../config/database')
 const Source = require('../models/sourcemodel')
 
-router.post('add', (req, res, next) => {
+router.get('/', (req, res, next) => {
+  Source.find({}, (err, sources) => {
+    res.json({sources: sources})
+  })
+})
+
+router.post('/add', (req, res, next) => {
+  console.log('Hi')
   const body = req.body;
   const newSource = new Source({
     name: body.name,
@@ -31,8 +38,8 @@ router.post('add', (req, res, next) => {
   });
 });
 
-router.delete(':sourceurl', (req, res, next) => {
-  Source.deleteSource(req.params.sourceurl, (err, deletedSource) => {
+router.delete('/:sourceid', (req, res, next) => {
+  Source.deleteSource(req.params.sourceid, (err, deletedSource) => {
     if (deletedSource) {
       res.json({success: true, msg: 'Source deleted successfully!'})
     } else {
@@ -41,8 +48,24 @@ router.delete(':sourceurl', (req, res, next) => {
   });
 });
 
-router.put(':sourceurl/tag/:tagname', (req, res, next) => {
-  
+router.post('/:sourceid/tags/:tagname', (req, res, next) => {
+  Source.addTag(req.params.sourceid, req.params.tagname, (err, updatedSource) => {
+    if (updatedSource) {
+      res.json({success: true, source: updatedSource});
+    } else {
+      res.json({success: false, msg: 'Could\'t add tag :('});
+    }
+  })
+})
+
+router.delete('/:sourceid/tags/:tagname', (req, res, next) => {
+  Source.removeTag(req.params.sourceid, req.params.tagname, (err, updatedSource) => {
+    if (updatedSource) {
+      res.json({success: true, source: updatedSource});
+    } else {
+      res.json({success: false, msg: 'Couldn\'t remove tag.'});
+    }
+  })
 })
 
 module.exports = router;
