@@ -65,7 +65,7 @@ router.post('/register', accountLimiter, (req, res, next) => {
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // start blocking after 5 requests
+  max: 5, // start blocking after 5 requests
   message:
     "Too many login attempts have been made"
 });
@@ -82,7 +82,7 @@ router.post('/authenticate', loginLimiter, (req, res, next) => {
       User.comparePassword(password, user.password, (err, isMatch) => {
         if(err) throw err;
         if (!isMatch) {
-          res.json({success: false, msg: "Wrong password!!!%!#%$^"})
+          res.json({success: false, msg: "Wrong password!"})
         }else{
           const jwtToken = jwt.sign(user.toJSON(), config.secret, {
             expiresIn: 28800 // 8 hours
