@@ -23,7 +23,7 @@ router.post('/:subjectname', (req, res, next) => {
 
   Subject.findOne({name: subjectName}, (err, subject) => {
     if (err) throw err;
-    if (!subject){
+    if (!subject) {
       Subject.addSubject(newSubject, (err, subject) => {
         if (err) throw err;
         if (subject){
@@ -32,7 +32,7 @@ router.post('/:subjectname', (req, res, next) => {
           res.json({success: false, msg: "Subject could not be added..."});
         }
       })
-    }else{
+    } else {
       res.json({success: false, msg: "This topic already exists!", subject: subject});
     }
   })
