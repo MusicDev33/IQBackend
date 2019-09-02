@@ -38,3 +38,8 @@ module.exports.urlToName = function(url) {
   }
   return nameText;
 }
+
+// Make strings safer to handle (hopefully...)
+module.exports.sanitize = function(str) {
+  return str.replace(/[\. ,:;\'\"=_*^!@|<>&#+()-]+/g, "-");
+}

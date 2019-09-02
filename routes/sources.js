@@ -17,7 +17,7 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/search/:searchterms', (req, res, next) => {
-  let regexp = '^' + req.params.searchterms;
+  let regexp = '^' + StringUtils.sanitize(req.params.searchterms.substring(0,39));
   console.log(regexp)
   Source.searchByName(regexp, (err, sources) => {
     if (sources.length) {
