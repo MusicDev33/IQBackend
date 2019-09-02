@@ -84,7 +84,7 @@ app.use(apiBase + 'sources', sources);
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get(apiBase + '/', (req, res) => {
-  res.send("404 Error")
+  res.status(404).send("404 Error")
 })
 
 if (process.env.NODE_ENV === 'production') {
