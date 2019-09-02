@@ -61,6 +61,7 @@ const acceptedAgents = ['IQAPIv1', 'IQiOSv1', 'IQAndroidv1']
 // Check IQ-User-Agent
 const checkAgent = function(req, res, next) {
   if (!acceptedAgents.includes(req.header('IQ-User-Agent'))) {
+    res.sendStatus(404)
     res.redirect(apiBase + '/')
   } else {
     next()
