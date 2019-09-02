@@ -29,13 +29,12 @@ const SourceSchema = mongoose.Schema({
 
 const Source = module.exports = mongoose.model('Source', SourceSchema);
 
-module.exports.searchByName= function(searchRegex, callback) {
+module.exports.searchByName = function(searchRegex, callback) {
   console.log(searchRegex)
   Source.find({ name: {$regex : searchRegex, $options: 'i'}}, (err, sources) => {
     if (err) throw err;
     // Will return an array, regardless of whether or not it's empty
     if (sources) {
-      console.log(sources)
       callback(null, sources);
     } else {
       callback(null, null);

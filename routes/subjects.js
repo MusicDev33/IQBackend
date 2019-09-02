@@ -38,6 +38,18 @@ router.post('/:subjectname', (req, res, next) => {
   })
 });
 
+router.get('/search/:searchterms', (req, res, next) => {
+  let regexp = '^' + req.params.searchterms;
+  console.log(regexp)
+  Subject.searchByName(regexp, (err, subjects) => {
+    if (subjects.length) {
+      res.json({success: true, sources: subjects});
+    } else {
+      res.json({success: false, msg: 'Couldn\'t find any subjects based on your search terms...'})
+    }
+  })
+})
+
 router.get('/:subjectname/questions', (req, res, next) => {
   var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' ');
