@@ -9,7 +9,7 @@ const fs = require('fs');
 const https = require('https');
 const helmet = require('helmet');
 
-let apiBase = '';
+let apiBase = '/api/v1/';
 
 if (process.env.NODE_ENV === 'production') {
   var privateKey  = fs.readFileSync('/etc/letsencrypt/live/inquantir.com/privkey.pem', 'utf8');
@@ -18,18 +18,16 @@ if (process.env.NODE_ENV === 'production') {
   var credentials = {key: privateKey, cert: certificate};
 
   apiBase = '/v1/';
-} else {
-  apiBase = '/api/v1/';
 }
 
 mongoose.connect(config.database);
 
 mongoose.connection.on('connected', () => {
-  console.log("Database connected: " + config.database);
+  console.log('Database connected: ' + config.database);
 });
 
 mongoose.connection.on('error', (err) => {
-  console.log("Database error: " + err)
+  console.log('Database error: ' + err)
 })
 
 mongoose.set('useFindAndModify', false);
@@ -84,7 +82,7 @@ app.use(apiBase + 'sources', sources);
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get(apiBase + '/', (req, res) => {
-  res.status(404).send("404 Error")
+  res.status(404).send('404 Error')
 })
 
 if (process.env.NODE_ENV === 'production') {
@@ -92,5 +90,5 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(2999, () => {
-  console.log("Inquantir Backend started!")
+  console.log('Inquantir Backend started!');
 })
