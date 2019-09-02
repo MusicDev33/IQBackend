@@ -59,8 +59,27 @@ module.exports.removeTag = function(sourceID, tagName, callback) {
   Source.findById(id, (err, source) => {
     if (err) throw err;
     if (source) {
-      console.log(source)
       source.tags = source.tags.filter(tag => tag !== tagName);
+      source.save((err, newSource) => {
+        if (err) throw err;
+        if (newSource) {
+          callback(null, newSource);
+        } else {
+          callback(null, null);
+        }
+      })
+    } else {
+      callback(null, null);
+    }
+  })
+}
+
+module.exports.deleteTags = function(sourceID, callback) {
+  const id = mongoose.Types.ObjectId(sourceID);
+  Source.findById(id, (err, source) => {
+    if (err) throw err;
+    if (source) {
+      source.tags = [];
       source.save((err, newSource) => {
         if (err) throw err;
         if (newSource) {

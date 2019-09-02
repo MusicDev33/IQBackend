@@ -9,6 +9,7 @@ const bcrypt = require('bcryptjs')
 const AutoRes = require('../RouteUtils/autores')
 const config = require('../config/database')
 const Source = require('../models/sourcemodel')
+const StringUtils = require('../ProtoChanges/string')
 
 router.get('/', (req, res, next) => {
   Source.find({}, (err, sources) => {
@@ -49,7 +50,8 @@ router.delete('/:sourceid', (req, res, next) => {
 });
 
 router.post('/:sourceid/tags/:tagname', (req, res, next) => {
-  Source.addTag(req.params.sourceid, req.params.tagname, (err, updatedSource) => {
+  const tagName = StringUtils.urlToName(req.params.tagname);
+  Source.addTag(req.params.sourceid, tagName, (err, updatedSource) => {
     if (updatedSource) {
       res.json({success: true, source: updatedSource});
     } else {
@@ -59,7 +61,18 @@ router.post('/:sourceid/tags/:tagname', (req, res, next) => {
 })
 
 router.delete('/:sourceid/tags/:tagname', (req, res, next) => {
-  Source.removeTag(req.params.sourceid, req.params.tagname, (err, updatedSource) => {
+  const tagName = StringUtils.urlToName(req.params.tagname);
+  Source.removeTag(req.params.sourceid, tagName, (err, updatedSource) => {
+    if (updatedSource) {
+      res.json({success: true, source: updatedSource});
+    } else {
+      res.json({success: false, msg: 'Couldn\'t remove tag.'});
+    }
+  })
+})
+
+router.delete('/:sourceid/tags/', (req, res, next) => {
+  Source.deleteTags(req.params.sourceid, (err, updatedSource) => {
     if (updatedSource) {
       res.json({success: true, source: updatedSource});
     } else {
