@@ -5,9 +5,7 @@ const Question = require('../models/questionmodel')
 const Answer = require('../models/answermodel')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
 const AutoRes = require('../RouteUtils/autores')
-const config = require('../config/database')
 const Vote = require('../models/votemodel')
 
 // Find a way to make this :questionurl instead of /add

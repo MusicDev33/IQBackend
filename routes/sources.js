@@ -5,7 +5,6 @@ const Question = require('../models/questionmodel')
 const Answer = require('../models/answermodel')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
 const AutoRes = require('../RouteUtils/autores')
 const config = require('../config/database')
 const Source = require('../models/sourcemodel')
@@ -18,7 +17,6 @@ router.get('/', (req, res, next) => {
 })
 
 router.post('/add', (req, res, next) => {
-  console.log('Hi')
   const body = req.body;
   const newSource = new Source({
     name: body.name,
