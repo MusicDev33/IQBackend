@@ -16,6 +16,18 @@ router.get('/', (req, res, next) => {
   })
 })
 
+router.get('/search/:searchterms', (req, res, next) => {
+  let regexp = '^' + req.params.searchterms;
+  console.log(regexp)
+  Source.searchByName(regexp, (err, sources) => {
+    if (sources.length) {
+      res.json({success: true, sources: sources});
+    } else {
+      res.json({success: false, msg: 'Couldn\'t find any sources based on your search terms...'})
+    }
+  })
+})
+
 router.post('/add', (req, res, next) => {
   const body = req.body;
   const newSource = new Source({
