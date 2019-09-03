@@ -43,7 +43,7 @@ router.get('/search/:searchterms', (req, res, next) => {
   console.log(regexp)
   Subject.searchByName(regexp, (err, subjects) => {
     if (subjects.length) {
-      res.json({success: true, sources: subjects});
+      res.json({success: true, subjects: subjects});
     } else {
       res.json({success: false, msg: 'Couldn\'t find any subjects based on your search terms...'})
     }
