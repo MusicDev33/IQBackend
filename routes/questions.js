@@ -25,15 +25,30 @@ router.post('/add', (req, res, next) => {
     askerHandle: req.body.askerHandle,
     votes: 1,
     views: 1,
-    details: "",
-    time: ""
+    details: '',
+    time: ''
   });
 
   Question.addQuestion(newQuestion, (err, question) => {
-    messages = ["Error on adding question.", "Question added: " + question.questionText]
-    res.json(AutoRes.AutoResC2(err, question, messages));
+    if (question) {
+      res.json({success: true, msg: 'Added question successfully.'})
+    } else {
+      res.json({success: false, msg: 'Something went wrong...'})
+    }
   });
 });
+
+router.delete('/', (req, res, next) => {
+  if (process.env.NODE_ENV !== 'production') {
+    Question.deleteAll((err, deleted) => {
+      if (deleted) {
+        res.json({success: true, msg: 'Successfully deleted all questions'})
+      } else {
+        res.json({success: false, msg: 'Something went wrong.'})
+      }
+    })
+  }
+})
 
 router.post("/:questionid/:userid/:answerid/votes/:vote", (req, res, next) => {
   Vote.addVote(req.params.userid, req.params.answerid, Number(req.params.vote), req.params.questionid, (err, newVote, oldVote) => {

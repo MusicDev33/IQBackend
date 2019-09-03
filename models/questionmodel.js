@@ -70,5 +70,30 @@ module.exports.getQuestionByURL = function(qURL, callback){
 
 module.exports.addQuestion = function(question, callback){
   // source is the source of the homework question, like Mastering Physics or ALEKS
-  question.save(callback)
+  Question.findOne({questionText: question.questionText}, (err, foundQuestion) => {
+    if (err) throw err;
+    if (foundQuestion) {
+      callback(null, null);
+    } else {
+      question.save((err, savedQuestion) => {
+        if (err) throw err;
+        if (savedQuestion) {
+          callback(null, savedQuestion);
+        } else {
+          callback(null, null)
+        }
+      });
+    }
+  })
+}
+
+module.exports.deleteAll = function(callback) {
+  Question.deleteMany({}, (err, deleted) => {
+    if (err) throw err;
+    if (deleted) {
+      callback(null, 'deleted')
+    } else {
+      callback(null, null);
+    }
+  })
 }
