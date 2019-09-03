@@ -25,7 +25,7 @@ const Subject = module.exports = mongoose.model('Subject', SubjectSchema);
 
 // Keeping this separated from the source search for the time being
 module.exports.searchByName = function(searchRegex, callback) {
-  Subject.find({ subjectURL: {$regex : searchRegex, $options: 'i'}}, (err, subjects) => {
+  Subject.find({ subjectURL: {$regex : searchRegex, $options: 'i'}}).lean().exec((err, subjects) => {
     if (err) throw err;
     // Will return an array, regardless of whether or not it's empty
     if (subjects) {
