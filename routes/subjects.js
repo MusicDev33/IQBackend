@@ -45,7 +45,9 @@ router.get('/search/:searchterms', (req, res, next) => {
     if (subjects.length) {
       res.json({success: true, subjects: subjects});
     } else {
-      res.json({success: false, msg: 'Couldn\'t find any subjects based on your search terms...'})
+      res.json({success: false,
+                msg: 'Couldn\'t find any subjects based on your search terms...',
+                subjects: []});
     }
   })
 })

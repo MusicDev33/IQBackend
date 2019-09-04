@@ -22,7 +22,9 @@ router.get('/search/:searchterms', (req, res, next) => {
     if (sources.length) {
       res.json({success: true, sources: sources});
     } else {
-      res.json({success: false, msg: 'Couldn\'t find any sources based on your search terms...'})
+      res.json({success: false,
+                msg: 'Couldn\'t find any sources based on your search terms...',
+                sources: []})
     }
   })
 })
