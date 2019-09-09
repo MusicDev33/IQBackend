@@ -31,10 +31,12 @@ router.get('/search/:searchterms', (req, res, next) => {
 
 router.post('/add', (req, res, next) => {
   const body = req.body;
+  
+  // Should I set a posterID for these or no?
   const newSource = new Source({
     name: body.name,
     follower: 0,
-    posterID: body.posterID,
+    posterID: 'no id',
     views: 0,
     sourceURL: Source.sourceTextToURL(body.name), // Use a function to create this
     tags: [],
