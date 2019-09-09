@@ -11,6 +11,11 @@ const StringUtils = require('../ProtoChanges/string')
 
 
 router.post('/:subjectname', (req, res, next) => {
+
+  if (req.params.subjectname.length < 4) {
+    return res.json({success: false, msg: 'There aren\'t any subjects that are under 4 characters long, nice try.'});
+  }
+
   var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
   var subjectURL = Subject.subjectNameToURL(subjectName)
@@ -27,8 +32,8 @@ router.post('/:subjectname', (req, res, next) => {
       Subject.addSubject(newSubject, (err, subject) => {
         if (err) throw err;
         if (subject){
-          res.json({success: true, msg: "Subject added!"});
-        }else{
+          res.json({success: true, msg: "Subject added!", subject: subject});
+        } else {
           res.json({success: false, msg: "Subject could not be added..."});
         }
       })
@@ -59,7 +64,7 @@ router.get('/:subjectname/questions', (req, res, next) => {
     if (err) throw err;
     if (questions.length){
       res.json({success: true, questions: questions});
-    }else{
+    } else {
       res.json({success: false, msg: "Couldn't find any questions on this topic."});
     }
   })

@@ -95,8 +95,8 @@ router.get('/id/:questionid', (req, res, next) => {
           res.json({success: false, msg: "Couldn't update question views."})
         }
       })
-    }else{
-      res.json({success: false, msg: "Couldn't get dat question by its _id, yo!"});
+    } else {
+      res.json({success: false, msg: "Couldn't get question by _id."});
     }
   })
 })
@@ -106,7 +106,7 @@ router.get('', (req, res, next) => {
     if (err) throw err;
     if (docs){
       res.json({success: true, questions: docs})
-    }else{
+    } else {
       res.json({success: false, msg: "Couldn't find any questions...maybe ask a few!"})
     }
   })
@@ -117,7 +117,7 @@ router.get('/:questionURL/answers', (req, res, next) => {
     if (err) throw err;
     if (answers){
       res.json({success: true, answers: answers})
-    }else{
+    } else {
       res.json({success: false, msg: "Couldn't find any answers, maybe go write one!"})
     }
   })
@@ -128,7 +128,7 @@ router.get('/:questionid/answers/votes/:userid', (req, res, next) => {
     if (err) throw err;
     if (votes.length){
       res.json({success: true, votes: votes})
-    }else{
+    } else {
       res.json({success: false, msg: "Could not get votes from questionid"})
     }
   })
@@ -149,7 +149,7 @@ router.post('/:questionURL/answers/add', (req, res, next) => {
     if (err) throw err;
     if (savedAnswer){
       res.json({success: true, msg: "Answer has been added!"})
-    }else{
+    } else {
       res.json({success: false, msg: "Answer couldn't be added for some reason."})
     }
   })

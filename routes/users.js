@@ -33,12 +33,12 @@ router.post('/register', accountLimiter, (req, res, next) => {
     if (err) throw err;
     if (user){
       res.json({success: false, msg: "There's already a user by that name!"});
-    }else{
+    } else {
       User.getUserByEmail(req.body.email, (err, user) => {
         if (err) throw err;
         if (user){
           res.json({success: false, msg: "This email is already associated with an account."})
-        }else{
+        } else {
           let newUser = new User({
             fbTokens: [],
             name: req.body.firstName + " " + req.body.lastName,
@@ -78,12 +78,12 @@ router.post('/authenticate', loginLimiter, (req, res, next) => {
     if (err) throw err;
     if (!user){
       res.json({success: false, msg: "Couldn't find user, sorry bro."});
-    }else{
+    } else {
       User.comparePassword(password, user.password, (err, isMatch) => {
         if(err) throw err;
         if (!isMatch) {
           res.json({success: false, msg: "Wrong password!"})
-        }else{
+        } else {
           const jwtToken = jwt.sign(user.toJSON(), config.secret, {
             expiresIn: 28800 // 8 hours
           });
@@ -124,7 +124,7 @@ router.post('/:userid/subjects/:subjectname', (req, res, next) => {
           })
         }
       })
-    }else{
+    } else {
       return res.json({success: false, msg: "Couldn't find subject, make sure it exists!"})
     }
   })
@@ -139,11 +139,11 @@ router.delete('/:userid/subjects/:subjectname', (req, res, next) => {
       Subject.removeFollower(subjectName, (err, subject) => {
         if (subject){
           res.json({success: true, user: user});
-        }else{
+        } else {
           res.json({success: true, user: user, msg: "Couldn't update follower count."})
         }
       })
-    }else{
+    } else {
       res.json({success: false, msg: "Failed for one of many reasons."})
     }
   })
@@ -157,7 +157,7 @@ router.get('/profile/:handle', (req, res, next) => {
     if (user){
       user.password = ""
       res.json({success: true, msg: "Successfully found user.", user: user})
-    }else{
+    } else {
       res.json({success: false, msg: "Couldn't find user by handle."})
     }
   })
@@ -170,7 +170,7 @@ router.get('/:userid/questions', (req, res, next) => {
     if (err) throw err;
     if (questions){
       res.json({success: true, msg: "Successfully found questions.", questions: questions})
-    }else{
+    } else {
       res.json({success: false, msg: "Couldn't find user's questions."})
     }
   })
@@ -181,7 +181,7 @@ router.get('/:userid/answers', (req, res, next) => {
     if (err) throw err;
     if (answers){
       res.json({success: true, msg: "Successfully found answers.", answers: answers})
-    }else{
+    } else {
       res.json({success: false, msg: "Couldn't find user's answers."})
     }
   })
@@ -210,7 +210,7 @@ router.post('/location/add', (req, res, next) => {
     if (err) throw err;
     if (location){
       res.json({success: true, msg: "Anonymous location data sent."})
-    }else{
+    } else {
       res.json({success: false, msg: "Couldn't collect anonymous location data."})
     }
   })
