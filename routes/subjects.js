@@ -13,13 +13,13 @@ const StringUtils = require('../ProtoChanges/string')
 router.post('/:subjectname', (req, res, next) => {
 
   if (req.params.subjectname.length < 4) {
-    return res.json({success: false, msg: 'There aren\'t any subjects that are under 4 characters long, nice try.'});
+    return res.json({success: false, msg: 'There aren\'t any subjects that are under 4 characters long. Probably.'});
   }
 
-  var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
+  let subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
-  var subjectURL = Subject.subjectNameToURL(subjectName)
-  var newSubject = new Subject({
+  const subjectURL = Subject.subjectNameToURL(subjectName)
+  const newSubject = new Subject({
     name: subjectName,
     followers: 0,
     subjectURL: subjectURL,
