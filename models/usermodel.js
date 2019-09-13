@@ -42,6 +42,9 @@ const UserSchema = mongoose.Schema({
   },
   profileHits: {
     type: Number
+  },
+  knowledge: {
+    type: Array
   }
 });
 
@@ -133,8 +136,7 @@ module.exports.removeSubject = function(userid, subject, callback){
             }
           })
       }
-    }else{
-      console.log("1")
+    } else {
       return callback(null, null);
     }
   })

@@ -50,7 +50,8 @@ router.post('/register', accountLimiter, (req, res, next) => {
             customization: {},
             currentSubjects: [],
             currentSources: [],
-            profileHits: 0
+            profileHits: 0,
+            knowledge: []
           });
 
           User.addUser(newUser, (err, user) => {
@@ -108,7 +109,6 @@ router.post('/authenticate', loginLimiter, (req, res, next) => {
 
 // User follows subject
 router.post('/:userid/subjects/:subjectname', (req, res, next) => {
-  console.log("Log")
   var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
   Subject.findByName(subjectName, (err, subject) => {
@@ -118,7 +118,7 @@ router.post('/:userid/subjects/:subjectname', (req, res, next) => {
           Subject.addFollower(subject.name, subject.followers + 1, (err, updatedSubject) => {
             if (updatedSubject){
               res.json({success: true, subject: updatedSubject})
-            }else{
+            } else {
               res.json({success: false, msg: "Something didn't happen...."})
             }
           })
