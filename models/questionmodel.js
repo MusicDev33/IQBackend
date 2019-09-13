@@ -42,10 +42,10 @@ const QuestionSchema = mongoose.Schema({
 const Question = module.exports = mongoose.model('Question', QuestionSchema);
 
 module.exports.questionTextToURL = function(questionText){
-  var urlText = ""
-  var specialChars = "!@#$%^&*()>< '"
+  let urlText = ""
+  const specialChars = "!@#$%^&*()>< '"
 
-  for (var i = 0; i < questionText.length; i++) {
+  for (let i = 0; i < questionText.length; i++) {
     if (specialChars.indexOf(questionText[i]) > -1){
       urlText += "-"
     }else if (questionText[i] == "?"){

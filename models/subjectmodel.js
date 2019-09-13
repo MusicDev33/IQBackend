@@ -38,11 +38,10 @@ module.exports.searchByName = function(searchRegex, callback) {
 
 // Maybe move this to a real utility file
 module.exports.subjectNameToURL = function(subjectText){
-  var urlText = ""
-  var subjectText = subjectText
-  var specialChars = "!@#$%^&*()>< '"
+  let urlText = ""
+  const specialChars = "!@#$%^&*()>< '"
 
-  for (var i = 0; i < subjectText.length; i++) {
+  for (let i = 0; i < subjectText.length; i++) {
     if (specialChars.indexOf(subjectText[i]) > -1){
       urlText += "-"
     }else if (subjectText[i] == "?"){

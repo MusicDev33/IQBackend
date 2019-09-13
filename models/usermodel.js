@@ -121,7 +121,7 @@ module.exports.removeSubject = function(userid, subject, callback){
       if (!user.currentSubjects.includes(subject)){
         return callback(null, null)
       } else {
-        var userSubjects = user.currentSubjects;
+        const userSubjects = user.currentSubjects;
         userSubjects.splice(user.currentSubjects.indexOf(subject), 1);
         User.findOneAndUpdate(
           {_id: userid},

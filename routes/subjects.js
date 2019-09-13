@@ -58,7 +58,7 @@ router.get('/search/:searchterms', (req, res, next) => {
 })
 
 router.get('/:subjectname/questions', (req, res, next) => {
-  var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
+  let subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' ');
   Question.find({subject: subjectName}, (err, questions) => {
     if (err) throw err;
@@ -71,7 +71,7 @@ router.get('/:subjectname/questions', (req, res, next) => {
 });
 
 router.get('/:subjectname/count', (req, res, next) => {
-  var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
+  let subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' ');
   Question.estimatedDocumentCount({subject: subjectName}, (err, count) => {
     if (err) throw err;

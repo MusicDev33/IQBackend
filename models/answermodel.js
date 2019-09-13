@@ -39,7 +39,7 @@ module.exports.getAnswerByPoster = function(poster, callback){
   // Change FirstName LastName to FirstName-LastName
   // replaces only the first dash in the first name
   // People don't have dashes in their first name, right?
-  var cleanedPoster = poster.replace('-', ' ');
+  const cleanedPoster = poster.replace('-', ' ');
   Answer.findOne({poster: cleanedPoster}, (err, answer) => {
     if (err) callback(err, null)
     if (!answer){

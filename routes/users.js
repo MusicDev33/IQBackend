@@ -109,7 +109,7 @@ router.post('/authenticate', loginLimiter, (req, res, next) => {
 
 // User follows subject
 router.post('/:userid/subjects/:subjectname', (req, res, next) => {
-  var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
+  let subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
   Subject.findByName(subjectName, (err, subject) => {
     if(subject){
@@ -132,7 +132,7 @@ router.post('/:userid/subjects/:subjectname', (req, res, next) => {
 
 // User unfollows subject
 router.delete('/:userid/subjects/:subjectname', (req, res, next) => {
-  var subjectName = StringUtils.titleCase(req.params.subjectname.trim())
+  let subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
   User.removeSubject(req.params.userid, subjectName, (err, user) => {
     if (user){

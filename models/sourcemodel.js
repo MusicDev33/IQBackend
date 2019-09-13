@@ -130,10 +130,10 @@ module.exports.deleteSource = function(sourceID, callback) {
 }
 
 module.exports.sourceTextToURL = function(sourceText) {
-  var urlText = ""
-  var specialChars = "!@#$%^&*()>< '"
+  let urlText = ""
+  const specialChars = "!@#$%^&*()>< '"
 
-  for (var i = 0; i < sourceText.length; i++) {
+  for (let i = 0; i < sourceText.length; i++) {
     if (specialChars.indexOf(sourceText[i]) > -1) {
       urlText += "-"
     } else if (sourceText[i] == "?"){

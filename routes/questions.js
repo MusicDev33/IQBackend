@@ -10,9 +10,7 @@ const Vote = require('../models/votemodel')
 
 // Find a way to make this :questionurl instead of /add
 router.post('/add', (req, res, next) => {
-  var questionURL = Question.questionTextToURL(req.body.question);
-  console.log("Got a question.");
-  console.log(req.body)
+  const questionURL = Question.questionTextToURL(req.body.question);
 
   let newQuestion = new Question({
     answers: [],
@@ -55,7 +53,7 @@ router.post("/:questionid/:userid/:answerid/votes/:vote", (req, res, next) => {
     Answer.adjustVotes(req.params.answerid, newVote, oldVote, (err, newAnswer) => {
       if (newAnswer){
         res.json({success: true, msg: "Voted successfully!"})
-      }else{
+      } else {
         res.json({success: false, msg: "Vote failed..."})
       }
     })
@@ -63,7 +61,6 @@ router.post("/:questionid/:userid/:answerid/votes/:vote", (req, res, next) => {
 })
 
 router.get('/:questionURL', (req, res, next) => {
-  console.log(req.params.questionURL)
   Question.getQuestionByURL(req.params.questionURL, (err, question) => {
     if (err) throw err;
     if (question){
@@ -72,11 +69,11 @@ router.get('/:questionURL', (req, res, next) => {
         if (err) throw err;
         if(updatedQuestion){
           res.json({success: true, question: updatedQuestion});
-        }else{
+        } else {
           res.json({success: false, msg: "Couldn't update question views."})
         }
       })
-    }else{
+    } else {
       res.json({success: false, msg: "Couldn't get dat question, yo!"});
     }
   })
@@ -91,7 +88,7 @@ router.get('/id/:questionid', (req, res, next) => {
         if (err) throw err;
         if(updatedQuestion){
           res.json({success: true, question: updatedQuestion});
-        }else{
+        } else {
           res.json({success: false, msg: "Couldn't update question views."})
         }
       })
