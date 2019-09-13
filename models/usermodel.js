@@ -66,7 +66,7 @@ module.exports.getUserByEmail = function(email, callback){
     if (err) callback(err, null)
     if (!user){
       callback(null, null);
-    }else{
+    } else {
       callback(null, user);
     }
   })
@@ -77,7 +77,7 @@ module.exports.getUserByHandle = function(handle, callback){
     if (err) callback(err, null)
     if (!user){
       callback(null, null);
-    }else{
+    } else {
       callback(null, user);
     }
   })
@@ -105,10 +105,10 @@ module.exports.addSubject = function(userid, subject, callback){
           if (err) throw err;
           return callback(null, updatedUser)
         })
-      }else{
+      } else {
         return callback(null, null)
       }
-    }else{
+    } else {
       return callback(null, null)
     }
   })
@@ -119,9 +119,8 @@ module.exports.removeSubject = function(userid, subject, callback){
     if (err) throw err;
     if (user){
       if (!user.currentSubjects.includes(subject)){
-        console.log("1")
         return callback(null, null)
-      }else{
+      } else {
         var userSubjects = user.currentSubjects;
         userSubjects.splice(user.currentSubjects.indexOf(subject), 1);
         User.findOneAndUpdate(
@@ -130,8 +129,7 @@ module.exports.removeSubject = function(userid, subject, callback){
             if (err) throw err;
             if (updatedUser){
               return callback(null, updatedUser);
-            }else{
-              console.log("1")
+            } else {
               return callback(null, null)
             }
           })
