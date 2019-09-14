@@ -44,7 +44,7 @@ const UserSchema = mongoose.Schema({
     type: Number
   },
   knowledge: {
-    type: Array
+    type: Object
   }
 });
 

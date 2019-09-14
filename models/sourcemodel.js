@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const StringUtils = require('../ProtoChanges/string');
 
 const SourceSchema = mongoose.Schema({
   name: {
@@ -29,8 +30,9 @@ const SourceSchema = mongoose.Schema({
 
 const Source = module.exports = mongoose.model('Source', SourceSchema);
 
-module.exports.searchByName = function(searchRegex, callback) {
-  Source.find({ sourceURL: {$regex : searchRegex, $options: 'i'}}, (err, sources) => {
+module.exports.searchByName = function(sourceString, callback) {
+  const regexp = '^' + StringUtils.sanitize(sourceString);
+  Source.find({ sourceURL: {$regex : regexp, $options: 'i'}}, (err, sources) => {
     if (err) throw err;
     // Will return an array, regardless of whether or not it's empty
     if (sources) {

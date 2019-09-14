@@ -12,8 +12,13 @@ const StringUtils = require('../ProtoChanges/string')
 
 router.post('/:subjectname', (req, res, next) => {
 
-  if (req.params.subjectname.length < 4) {
-    return res.json({success: false, msg: 'There aren\'t any subjects that are under 4 characters long. Probably.'});
+  if (req.params.subjectname.length < 3) {
+    return res.json({success: false, msg: 'Subject name is too short'});
+  }
+
+  // Still not sure what the cutoff should be
+  if (req.params.subjectname.length > 35) {
+    return res.json({success: false, msg: 'Subject name is too long'});
   }
 
   let subjectName = StringUtils.titleCase(req.params.subjectname.trim())
@@ -44,9 +49,7 @@ router.post('/:subjectname', (req, res, next) => {
 });
 
 router.get('/search/:searchterms', (req, res, next) => {
-  let regexp = '^' + StringUtils.sanitize(req.params.searchterms.substring(0, 39));
-  console.log(regexp)
-  Subject.searchByName(regexp, (err, subjects) => {
+  Subject.searchByName(req.params.searchterms.substring(0, 39), (err, subjects) => {
     if (subjects.length) {
       res.json({success: true, subjects: subjects});
     } else {

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const StringUtils = require('../ProtoChanges/string');
 
 const SubjectSchema = mongoose.Schema({
   name: {
@@ -24,8 +25,9 @@ const SubjectSchema = mongoose.Schema({
 const Subject = module.exports = mongoose.model('Subject', SubjectSchema);
 
 // Keeping this separated from the source search for the time being
-module.exports.searchByName = function(searchRegex, callback) {
-  Subject.find({ subjectURL: {$regex : searchRegex, $options: 'i'}}).lean().exec((err, subjects) => {
+module.exports.searchByName = function(searchTerm, callback) {
+  const regexp = '^' + StringUtils.sanitize(searchTerm);
+  Subject.find({ subjectURL: {$regex : regexp, $options: 'i'}}).lean().exec((err, subjects) => {
     if (err) throw err;
     // Will return an array, regardless of whether or not it's empty
     if (subjects) {

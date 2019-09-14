@@ -17,8 +17,7 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/search/:searchterms', (req, res, next) => {
-  let regexp = '^' + StringUtils.sanitize(req.params.searchterms.substring(0, 39));
-  Source.searchByName(regexp, (err, sources) => {
+  Source.searchByName(req.params.searchterms.substring(0, 39), (err, sources) => {
     if (sources.length) {
       res.json({success: true, sources: sources});
     } else {
@@ -31,7 +30,7 @@ router.get('/search/:searchterms', (req, res, next) => {
 
 router.post('/add', (req, res, next) => {
   const body = req.body;
-  
+
   // Should I set a posterID for these or no?
   const newSource = new Source({
     name: body.name,
