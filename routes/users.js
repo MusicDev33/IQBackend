@@ -164,9 +164,7 @@ router.get('/profile/:handle', (req, res, next) => {
 });
 
 router.get('/:userid/questions', (req, res, next) => {
-  console.log("Questions requested.");
-  console.log(req.params.userid)
-  Question.find({askerID: req.params.userid}, (err, questions) => {
+  Question.find({askerID: req.params.userid}).sort({_id: -1}).exec((err, questions) => {
     if (err) throw err;
     if (questions){
       res.json({success: true, msg: "Successfully found questions.", questions: questions})
@@ -177,7 +175,7 @@ router.get('/:userid/questions', (req, res, next) => {
 });
 
 router.get('/:userid/answers', (req, res, next) => {
-  Answer.find({posterID: req.params.userid}, (err, answers) => {
+  Answer.find({posterID: req.params.userid}).sort({_id: -1}).exec((err, answers) => {
     if (err) throw err;
     if (answers){
       res.json({success: true, msg: "Successfully found answers.", answers: answers})
