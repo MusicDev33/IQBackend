@@ -104,8 +104,11 @@ module.exports.addKnowledge = function(userid, subject, callback) {
       const numSubjects = knowledgeSubjects.length + 1;
       if (!knowledgeSubjects.includes(subject)) {
         user.knowledge[numSubjects.toString()] = subject;
+        console.log(user.knowledge)
+        user.markModified('knowledge');
         user.save((err, updatedUser) => {
           if (err) throw err;
+          console.log(updatedUser);
           return callback(null, updatedUser);
         })
       } else {
@@ -128,6 +131,7 @@ module.exports.deleteKnowledge = function(userid, subjectName, callback) {
         knowledgeObject[i.toString()] = knowledgeSubjects[i-1];
       }
       user.knowledge = knowledgeObject;
+      user.markModified('knowledge');
       user.save((err, updatedUser) => {
         if (err) throw err;
         return callback(null, updatedUser);
@@ -143,6 +147,7 @@ module.exports.updateKnowledge = function(userid, knowledgeObject, callback) {
     if (err) throw err;
     if (user) {
       user.knowledge = knowledgeObject;
+      user.markModified('knowledge');
       user.save((err, updatedUser) => {
         if (err) throw err;
         return callback(null, updatedUser);
