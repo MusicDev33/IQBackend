@@ -21,7 +21,7 @@ const Vote = require('../models/votemodel')
 module.exports.getFeed = function(userID, callback) {
   User.findById(userID, (err, user) => {
     if (err) throw err;
-    // Check if knowledge has keys
+    // Check if knowledge object has keys
     if (user && Object.keys(user.knowledge).length !== 0 && user.knowledge.constructor === Object) {
       Question.find({subject: user.knowledge["1"]}).sort({_id: -1}).limit(30).exec((err, questions) => {
         if (err) throw err;
