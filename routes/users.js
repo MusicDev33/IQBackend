@@ -51,7 +51,7 @@ router.post('/register', accountLimiter, (req, res, next) => {
             currentSubjects: [],
             currentSources: [],
             profileHits: 0,
-            knowledge: []
+            knowledge: {}
           });
 
           User.addUser(newUser, (err, user) => {
