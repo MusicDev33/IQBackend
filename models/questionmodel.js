@@ -43,7 +43,7 @@ const Question = module.exports = mongoose.model('Question', QuestionSchema);
 
 module.exports.questionTextToURL = function(questionText){
   let urlText = ""
-  const specialChars = "!@#$%^&*()>< '"
+  const specialChars = "!@#$%^&*()>< '/\\"
 
   for (let i = 0; i < questionText.length; i++) {
     if (specialChars.indexOf(questionText[i]) > -1){
