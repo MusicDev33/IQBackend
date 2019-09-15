@@ -193,7 +193,7 @@ router.get('/profile', passport.authenticate('jwt', {session:false}),(req, res, 
 });
 
 router.post('/:userid/knowledge/:subject', (req, res, next) => {
-  User.addKnowledge(req.params.userid, req.params.subject, (err, savedUser) => {
+  User.addKnowledge(req.params.userid, StringUtils.urlToName(req.params.subject), (err, savedUser) => {
     if (savedUser) {
       res.json({success: true, msg: "Add subject to user knowledge"})
     } else {
@@ -203,7 +203,7 @@ router.post('/:userid/knowledge/:subject', (req, res, next) => {
 })
 
 router.delete('/:userid/knowledge/:subject', (req, res, next) => {
-  User.deleteKnowledge(req.params.userid, req.params.subject, (err, savedUser) => {
+  User.deleteKnowledge(req.params.userid, StringUtils.urlToName(req.params.subject), (err, savedUser) => {
     if (savedUser) {
       res.json({success: true, msg: "Deleted subject from user knowledge"})
     } else {
