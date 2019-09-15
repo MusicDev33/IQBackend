@@ -12,6 +12,7 @@ These are ordered in importance, with most important being at the top
 const User = require('../models/usermodel')
 const Question = require('../models/questionmodel')
 const Answer = require('../models/answermodel')
+const Subject = require('../models/subjectmodel')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const AutoRes = require('../RouteUtils/autores')
@@ -19,6 +20,19 @@ const Vote = require('../models/votemodel')
 
 module.exports.getFeed = function(userID, callback) {
   User.findById(userID, (err, user) => {
-    
+    if (err) throw err;
+    // Check if knowledge has keys
+    if (user && Object.keys(user.knowledge).length !== 0 && user.knowledge.constructor === Object) {
+      Question.find({subject: user.knowledge["1"]}).sort({_id: -1}).limit(30).exec((err, questions) => {
+        if (err) throw err;
+        if (questions) {
+          callback(null, questions)
+        } else {
+          callback(null, null)
+        }
+      })
+    } else {
+      callback(null, null)
+    }
   })
 }
