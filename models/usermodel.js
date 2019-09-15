@@ -96,6 +96,63 @@ module.exports.addSubject = function(subjectArray, userid, callback){
     })
 }*/
 
+module.exports.addKnowledge = function(userid, subject, callback) {
+  User.findById(userid, (err, user) => {
+    if (err) throw err;
+    if (user) {
+      const knowledgeSubjects = Object.values(user.knowledge);
+      const numSubjects = knowledgeSubjects.length + 1;
+      if (!knowledgeSubjects.includes(subject)) {
+        user.knowledge[numSubjects.toString()] = subject;
+        user.save((err, updatedUser) => {
+          if (err) throw err;
+          return callback(null, updatedUser);
+        })
+      } else {
+        callback(null, null);
+      }
+    } else {
+      callback(null, null);
+    }
+  })
+}
+
+module.exports.deleteKnowledge = function(userid, subjectName, callback) {
+  User.findById(userid, (err, user) => {
+    if (err) throw err;
+    if (user) {
+      let knowledgeSubjects = Object.values(user.knowledge);
+      knowledgeSubjects = knowledgeSubjects.filter(subject => subject !== subjectName);
+      let knowledgeObject = {};
+      for (i = 1; i < knowledgeSubjects.length+1; i++) {
+        knowledgeObject[i.toString()] = knowledgeSubjects[i-1];
+      }
+      user.knowledge = knowledgeObject;
+      user.save((err, updatedUser) => {
+        if (err) throw err;
+        return callback(null, updatedUser);
+      })
+    } else {
+      callback(null, null);
+    }
+  })
+}
+
+module.exports.updateKnowledge = function(userid, knowledgeObject, callback) {
+  User.findById(userid, (err, user) => {
+    if (err) throw err;
+    if (user) {
+      user.knowledge = knowledgeObject;
+      user.save((err, updatedUser) => {
+        if (err) throw err;
+        return callback(null, updatedUser);
+      })
+    } else {
+      callback(null, null);
+    }
+  })
+}
+
 module.exports.addSubject = function(userid, subject, callback){
   User.findById(userid, (err, user) => {
     if (user){

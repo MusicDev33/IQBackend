@@ -192,6 +192,36 @@ router.get('/profile', passport.authenticate('jwt', {session:false}),(req, res, 
   res.json({user: req.user})
 });
 
+router.post('/:userid/knowledge/:subject', (req, res, next) => {
+  User.addKnowledge(req.params.userid, req.params.subject, (err, savedUser) => {
+    if (savedUser) {
+      res.json({success: true, msg: "Add subject to user knowledge"})
+    } else {
+      res.json({success: false, msg: 'Couldn\'t add subject to user knowledge'})
+    }
+  })
+})
+
+router.delete('/:userid/knowledge/:subject', (req, res, next) => {
+  User.deleteKnowledge(req.params.userid, req.params.subject, (err, savedUser) => {
+    if (savedUser) {
+      res.json({success: true, msg: "Deleted subject from user knowledge"})
+    } else {
+      res.json({success: false, msg: 'Couldn\'t delete subject from user knowledge'})
+    }
+  })
+})
+
+router.put(':userid/knowledge', (req, res, next) => {
+  User.deleteKnowledge(req.params.userid, req.body.knowledge, (err, savedUser) => {
+    if (savedUser) {
+      res.json({success: true, msg: "Successfully updated user"})
+    } else {
+      res.json({success: false, msg: 'Couldn\'t update user'})
+    }
+  })
+})
+
 router.post('/location/add', (req, res, next) => {
   const newLocation = new Location({
     city: req.body.city,
