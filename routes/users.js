@@ -202,6 +202,16 @@ router.post('/:userid/knowledge/:subject', (req, res, next) => {
   })
 })
 
+router.post('/:userid/bio', (req, res, next) => {
+  User.changeBio(req.params.userid, req.body.bio, (err, updatedUser) => {
+    if (updatedUser) {
+      res.json({success: true, msg: 'Changed bio!'});
+    } else {
+      res.json({success: false, msg: 'Couldn\'t change bio...'});
+    }
+  });
+});
+
 router.delete('/:userid/knowledge/:subject', (req, res, next) => {
   User.deleteKnowledge(req.params.userid, StringUtils.urlToName(req.params.subject), (err, savedUser) => {
     if (savedUser) {

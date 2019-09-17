@@ -61,6 +61,26 @@ module.exports.getUserById = function(mongoID, callback){
   });
 }
 
+module.exports.changeBio = function(mongoID, bio, callback) {
+  User.findById(mongoID, (err, user) => {
+    if (err) throw err;
+    if (user) {
+      user.bio = bio;
+      user.markModified('bio');
+      user.save((err, updatedUser) => {
+        if (err) throw err;
+        if (updatedUser) {
+          callback(null, updatedUser);
+        } else {
+          callback(null, null);
+        }
+      })
+    } else {
+      callback(null, null);
+    }
+  })
+}
+
 module.exports.getUserByEmail = function(email, callback){
   User.findOne({email: email}, (err, user) => {
     if (err) callback(err, null)
