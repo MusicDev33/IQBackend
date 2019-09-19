@@ -46,6 +46,7 @@ router.post('/register', accountLimiter, (req, res, next) => {
             handle: req.body.handle,
             phoneNumber: req.body.phoneNumber,
             password: req.body.password,
+            bio: "",
             profileImage: "",
             customization: {},
             currentSubjects: [],
@@ -96,7 +97,9 @@ router.post('/authenticate', loginLimiter, (req, res, next) => {
               id: user._id,
               name: user.name,
               phoneNumber: user.phoneNumber,
-              handle: user.handle
+              handle: user.handle,
+              knowledge: user.knowledge,
+              customization: user.customization
             }
 
           })
@@ -156,6 +159,8 @@ router.get('/profile/:handle', (req, res, next) => {
     if (err) throw err;
     if (user){
       user.password = ""
+      console.log("Profile")
+      console.log(user)
       res.json({success: true, msg: "Successfully found user.", user: user})
     } else {
       res.json({success: false, msg: "Couldn't find user by handle."})

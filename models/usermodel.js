@@ -46,7 +46,7 @@ const UserSchema = mongoose.Schema({
   knowledge: {
     type: Object
   }
-});
+}, { minimize: false });
 
 const User = module.exports = mongoose.model('User', UserSchema);
 
