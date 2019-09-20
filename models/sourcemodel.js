@@ -131,6 +131,41 @@ module.exports.deleteSource = function(sourceID, callback) {
   })
 }
 
+module.exports.addFollower = function(source, newCount, callback){ // poorly named...I know...
+  Source.findOneAndUpdate({name: source},
+    {followers: newCount},
+    {new: true}, (err, updatedSource) => {
+      if (err) throw err;
+      if (updatedSource){
+        callback(null, updatedSource);
+      }else{
+        callback(null, null)
+      }
+  })
+}
+
+module.exports.removeFollower = function(sourceName, callback){
+  Source.findOne({name: sourceName}, (err, source) => {
+    if (err) throw err;
+    if (source){
+      Source.findOneAndUpdate({name: source.name},
+        {followers: source.followers - 1},
+        {new: true}, (err, updatedSource) => {
+          if (err) throw err;
+          if (updatedSource){
+            callback(null, updatedSource);
+          } else {
+            console.log(1)
+            callback(null, null)
+          }
+      })
+    } else {
+      console.log(2)
+      callback(null, null)
+    }
+  })
+}
+
 module.exports.sourceTextToURL = function(sourceText) {
   let urlText = ""
   const specialChars = "!@#$%^&*()>< '"

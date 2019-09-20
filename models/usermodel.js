@@ -180,8 +180,8 @@ module.exports.updateKnowledge = function(userid, knowledgeObject, callback) {
 
 module.exports.addSubject = function(userid, subject, callback){
   User.findById(userid, (err, user) => {
-    if (user){
-      if (!user.currentSubjects.includes(subject)){
+    if (user) {
+      if (!user.currentSubjects.includes(subject)) {
         user.currentSubjects.push(subject)
         user.save((err, updatedUser) => {
           if (err) throw err;
@@ -215,6 +215,25 @@ module.exports.removeSubject = function(userid, subject, callback){
               return callback(null, null)
             }
           })
+      }
+    } else {
+      return callback(null, null);
+    }
+  })
+}
+
+module.exports.addSource = function(userid, source, callback) {
+  User.findById(userid, (err, user) => {
+    if (err) throw err;
+    if (user) {
+      if (!user.currentSources.includes(source)){
+        user.currentSources.push(source)
+        user.save((err, updatedUser) => {
+          if (err) throw err;
+          return callback(null, updatedUser);
+        })
+      } else {
+        return callback(null, null);
       }
     } else {
       return callback(null, null);

@@ -94,7 +94,7 @@ module.exports.removeFollower = function(subjectName, callback){
             callback(null, null)
           }
       })
-    }else{
+    } else {
       console.log(2)
       callback(null, null)
     }

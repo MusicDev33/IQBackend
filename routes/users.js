@@ -115,7 +115,7 @@ router.post('/:userid/subjects/:subjectname', (req, res, next) => {
   let subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
   Subject.findByName(subjectName, (err, subject) => {
-    if(subject){
+    if (subject){
       User.addSubject(req.params.userid, subject.name, (err, updatedUser) => {
         if (updatedUser){
           Subject.addFollower(subject.name, subject.followers + 1, (err, updatedSubject) => {
@@ -152,7 +152,46 @@ router.delete('/:userid/subjects/:subjectname', (req, res, next) => {
   })
 })
 
+// User follows source
+router.post('/:userid/sources/:sourcename', (req, res, next) => {
+  let sourceName = StringUtils.titleCase(req.params.sourcename.trim());
+  sourceName = sourceName.replace(/-/g, ' ');
+  Source.findByName(sourceName, (err, source) => {
+    if (source) {
+      User.addSource(req.params.userid, source.name, (err, updatedUser) => {
+        if (updatedUser){
+          Source.addFollower(source.name, source.followers + 1, (err, updatedSource) => {
+            if (updatedSource){
+              res.json({success: true, source: updatedSource});
+            } else {
+              res.json({success: false, msg: "Something didn't happen...."});
+            }
+          })
+        }
+      })
+    } else {
+      res.json({success: false, msg: 'Something went wrong...'})
+    }
+  })
+})
 
+router.delete('/:userid/sources/:sourcename', (req, res, next) => {
+  let sourceName = StringUtils.titleCase(req.params.sourcename.trim())
+  sourceName = sourceName.replace(/-/g, ' '); // replaces dashes with spaces
+  User.removeSubject(req.params.userid, sourceName, (err, user) => {
+    if (user){
+      Source.removeFollower(sourceName, (err, source) => {
+        if (source){
+          res.json({success: true, user: user});
+        } else {
+          res.json({success: true, user: user, msg: "Couldn't update follower count."})
+        }
+      })
+    } else {
+      res.json({success: false, msg: "Failed for one of many reasons."})
+    }
+  })
+})
 
 router.get('/profile/:handle', (req, res, next) => {
   User.getUserByHandle(req.params.handle, (err, user) => {
