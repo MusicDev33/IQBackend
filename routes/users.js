@@ -4,6 +4,7 @@ const User = require('../models/usermodel')
 const Question = require('../models/questionmodel')
 const Answer = require('../models/answermodel')
 const Subject = require('../models/subjectmodel')
+const Source = require('../models/sourcemodel')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
@@ -156,10 +157,13 @@ router.delete('/:userid/subjects/:subjectname', (req, res, next) => {
 router.post('/:userid/sources/:sourcename', (req, res, next) => {
   let sourceName = StringUtils.titleCase(req.params.sourcename.trim());
   sourceName = sourceName.replace(/-/g, ' ');
+  console.log(sourceName)
   Source.findByName(sourceName, (err, source) => {
     if (source) {
       User.addSource(req.params.userid, source.name, (err, updatedUser) => {
+        console.log(source.followers)
         if (updatedUser){
+          console.log('cool')
           Source.addFollower(source.name, source.followers + 1, (err, updatedSource) => {
             if (updatedSource){
               res.json({success: true, source: updatedSource});
@@ -167,6 +171,8 @@ router.post('/:userid/sources/:sourcename', (req, res, next) => {
               res.json({success: false, msg: "Something didn't happen...."});
             }
           })
+        } else {
+          res.json({success: false, msg: "Something went wrong..."})
         }
       })
     } else {

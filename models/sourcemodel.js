@@ -43,6 +43,18 @@ module.exports.searchByName = function(sourceString, callback) {
   });
 }
 
+module.exports.findByName = function(source, callback){
+  Source.findOne({name: source}, (err, foundSource) => {
+    if (err) throw err;
+    if (foundSource){
+      console.log('found!')
+      callback(null, foundSource)
+    }else{
+      callback(null, null)
+    }
+  })
+}
+
 module.exports.addTag = function(sourceID, tagName, callback) {
   const id = mongoose.Types.ObjectId(sourceID);
   Source.findById(id, (err, source) => {

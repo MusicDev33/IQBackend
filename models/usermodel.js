@@ -226,8 +226,12 @@ module.exports.addSource = function(userid, source, callback) {
   User.findById(userid, (err, user) => {
     if (err) throw err;
     if (user) {
+      console.log(user.currentSources)
+      console.log(source)
       if (!user.currentSources.includes(source)){
+        console.log('hi')
         user.currentSources.push(source)
+        user.markModified('currentSources');
         user.save((err, updatedUser) => {
           if (err) throw err;
           return callback(null, updatedUser);
