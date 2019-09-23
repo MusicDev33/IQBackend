@@ -155,7 +155,7 @@ router.delete('/:userid/subjects/:subjectname', (req, res, next) => {
 
 // User follows source
 router.post('/:userid/sources/:sourcename', (req, res, next) => {
-  let sourceName = StringUtils.titleCase(req.params.sourcename.trim());
+  let sourceName = req.params.sourcename.trim();
   sourceName = sourceName.replace(/-/g, ' ');
   console.log(sourceName)
   Source.findByName(sourceName, (err, source) => {
@@ -168,15 +168,15 @@ router.post('/:userid/sources/:sourcename', (req, res, next) => {
             if (updatedSource){
               res.json({success: true, source: updatedSource});
             } else {
-              res.json({success: false, msg: "Something didn't happen...."});
+              res.json({success: false, msg: "Failed to update source."});
             }
           })
         } else {
-          res.json({success: false, msg: "Something went wrong..."})
+          res.json({success: false, msg: "Failed to update user."})
         }
       })
     } else {
-      res.json({success: false, msg: 'Something went wrong...'})
+      res.json({success: false, msg: 'Couldn\'t find source...'})
     }
   })
 })
