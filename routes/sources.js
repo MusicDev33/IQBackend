@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const mongoose = require('mongoose');
 const User = require('../models/usermodel')
 const Question = require('../models/questionmodel')
 const Answer = require('../models/answermodel')
@@ -14,7 +15,7 @@ router.get('/', (req, res, next) => {
   Source.find({}, (err, sources) => {
     res.json({sources: sources})
   })
-})
+});
 
 router.get('/search/:searchterms', (req, res, next) => {
   Source.searchByName(req.params.searchterms.substring(0, 39), (err, sources) => {
@@ -24,6 +25,35 @@ router.get('/search/:searchterms', (req, res, next) => {
       res.json({success: false,
                 msg: 'Couldn\'t find any sources based on your search terms...',
                 sources: []})
+    }
+  })
+});
+
+router.get('/:sourceid/questions', (req, res, next) => {
+  const id = mongoose.Types.ObjectId(req.params.sourceid);
+  Source.findById(id, (err, source) => {
+    if (err) throw err;
+    if (source) {
+      Question.findBySourceName(source.name, (err, questions) => {
+        if (questions){
+          res.json({success: true, questions: questions})
+        } else {
+          res.json({success: false, msg: 'Couldn\'t find questions from source.'});
+        }
+      })
+    } else {
+      res.json({success: false, msg: 'Couldn\'t find source.'})
+    }
+  })
+});
+
+router.get('/url/:sourceurl/questions', (req, res, next) => {
+  const sourceName = StringUtils.urlToName(req.params.sourceurl);
+  Question.findBySourceName(sourceName, (err, questions) => {
+    if (questions){
+      res.json({success: true, questions: questions})
+    } else {
+      res.json({success: false, msg: 'Couldn\'t find questions from source.'});
     }
   })
 })

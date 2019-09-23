@@ -87,6 +87,17 @@ module.exports.addQuestion = function(question, callback){
   })
 }
 
+module.exports.findBySourceName = function(sourceName, callback){
+  Question.find({homeworkSource: sourceName}, (err, questions) => {
+    if (err) throw err;
+    if (questions) {
+      callback(null, questions);
+    } else {
+      callback(null, null);
+    }
+  })
+}
+
 module.exports.deleteAll = function(callback) {
   Question.deleteMany({}, (err, deleted) => {
     if (err) throw err;
