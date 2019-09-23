@@ -17,6 +17,18 @@ router.get('/', (req, res, next) => {
   })
 });
 
+router.get('/name/:sourceurl', (req, res, next) => {
+  const sourceName = StringUtils.urlToName(req.params.sourceurl);
+  Source.findOne({name: sourceName}, (err, source) => {
+    if (err) throw err;
+    if (source) {
+      res.json({success: true, source: source});
+    } else {
+      res.json({success: false, msg: 'Couldn\'t find source!'});
+    }
+  })
+})
+
 router.get('/search/:searchterms', (req, res, next) => {
   Source.searchByName(req.params.searchterms.substring(0, 39), (err, sources) => {
     if (sources.length) {
