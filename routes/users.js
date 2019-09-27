@@ -43,7 +43,7 @@ router.post('/register', accountLimiter, (req, res, next) => {
           let newUser = new User({
             fbTokens: [],
             name: req.body.firstName + " " + req.body.lastName,
-            email: req.body.email,
+            email: req.body.email.toLowerCase(),
             handle: req.body.handle,
             phoneNumber: req.body.phoneNumber,
             password: req.body.password,
@@ -74,7 +74,7 @@ const loginLimiter = rateLimit({
 });
 
 router.post('/authenticate', loginLimiter, (req, res, next) => {
-  const email = req.body.email;
+  const email = req.body.email.toLowerCase();
   const password = req.body.password
   console.log(req.ip)
   User.getUserByEmail(email, (err, user) => {

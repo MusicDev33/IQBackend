@@ -24,7 +24,8 @@ router.post('/add', (req, res, next) => {
     votes: 1,
     views: 1,
     details: '',
-    time: ''
+    time: '',
+    tags: []
   });
 
   Question.addQuestion(newQuestion, (err, question) => {

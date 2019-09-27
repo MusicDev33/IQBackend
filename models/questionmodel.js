@@ -36,6 +36,9 @@ const QuestionSchema = mongoose.Schema({
   },
   time: {
     type: String
+  },
+  tags: {
+    type: Array
   }
 });
 

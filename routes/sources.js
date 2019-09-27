@@ -70,6 +70,18 @@ router.get('/url/:sourceurl/questions', (req, res, next) => {
   })
 })
 
+router.get('/:sourceid/tags', (req, res, next) => {
+  const id = mongoose.Types.ObjectId(req.params.sourceid);
+  Source.findById(id, (err, source) => {
+    if (err) throw err;
+    if (source) {
+      res.json({success: true, tags: source.tags});
+    } else {
+      res.json({success: false, msg: 'Couldn\'t find source...'});
+    }
+  })
+})
+
 router.post('/add', (req, res, next) => {
   const body = req.body;
 
