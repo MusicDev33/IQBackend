@@ -26,8 +26,16 @@ router.post('/register', accountLimiter, (req, res, next) => {
   // Ugh, nested ifs AND callbacks. Can you think of anything worse?
   // P.S. Maybe I just suck at writing decent code...
 
-  if (req.body.handle.indexOf(' ') >= 0){
-    return res.json({success: false, msg: "You can't have spaces in your handle."})
+  if (req.body.handle.indexOf(' ') >= 0 || !req.body.handle.match(/^[a-zA-Z0-9_]+$/g)){
+    return res.json({success: false, msg: "You can't have special characters in your handle."})
+  }
+
+  if (!req.body.firstName.match(/^[a-zA-Z0-9_-']+$/g) || !req.body.lastName.match(/^[a-zA-Z0-9_-']+$/g)) {
+    return res.json({success: false, msg: "You can't have special characters in your name."})
+  }
+
+  if (!req.body.phoneNumber.match(/^[0-9-]+$/g)) {
+    return res.json({success: false, msg: "You can only have numbers in your phone number."})
   }
 
   User.getUserByHandle(req.body.handle, (err, user) => {

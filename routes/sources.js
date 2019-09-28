@@ -80,6 +80,25 @@ router.get('/:sourceid/tags', (req, res, next) => {
       res.json({success: false, msg: 'Couldn\'t find source...'});
     }
   })
+});
+
+router.get('/:sourceid/:tagname/questions', (req, res, next) => {
+  const id = mongoose.Types.ObjectId(req.params.sourceid);
+  Source.findById(id, (err, source) => {
+    if (err) throw err;
+    if (source) {
+      Question.find({homeworkSource: source.name, tags: req.params.tagname}, (err, questions) => {
+        if (err) throw err;
+        if (questions) {
+          res.json({success: true, questions: questions});
+        } else {
+          res.json({success: false, msg: 'Couldn\'t find questions. This actually a real Inquantir problem. Call 911.'});
+        }
+      })
+    } else {
+      res.json({success: false, msg: 'Couldn\'t find source...'});
+    }
+  })
 })
 
 router.post('/add', (req, res, next) => {
@@ -116,6 +135,10 @@ router.delete('/:sourceid', (req, res, next) => {
 });
 
 router.post('/:sourceid/tags/:tagname', (req, res, next) => {
+  if (!req.params.tagname.match(/^[a-zA-Z0-9_-]+$/g)) {
+    return res.json({success: false, msg: "Tags must be alphanumeric, but can also have dashes"})
+  }
+
   const tagName = StringUtils.urlToName(req.params.tagname);
   Source.addTag(req.params.sourceid, tagName, (err, updatedSource) => {
     if (updatedSource) {
