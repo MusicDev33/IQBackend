@@ -5,6 +5,9 @@ const SourceSchema = mongoose.Schema({
   name: {
     type: String
   },
+  author: {
+    type: String
+  },
   followers: {
     type: Number
   },

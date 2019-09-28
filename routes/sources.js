@@ -104,6 +104,10 @@ router.get('/:sourceid/:tagname/questions', (req, res, next) => {
 router.post('/add', (req, res, next) => {
   const body = req.body;
 
+  if (!body.name.match(/^[a-zA-Z0-9-']+$/g)) {
+    return res.json({success: false, msg: "Source names are alphanumeric (and may contain dashes and apostrophes)"})
+  }
+
   // Should I set a posterID for these or no?
   const newSource = new Source({
     name: body.name,
@@ -112,7 +116,8 @@ router.post('/add', (req, res, next) => {
     views: 0,
     sourceURL: Source.sourceTextToURL(body.name), // Use a function to create this
     tags: [],
-    edition: body.edition
+    edition: body.edition,
+    author: body.author ? body.author : ''
   })
 
   Source.saveSource(newSource, (err, savedSource) => {

@@ -16,6 +16,10 @@ router.post('/:subjectname', (req, res, next) => {
     return res.json({success: false, msg: 'Subject name is too short'});
   }
 
+  if (!req.params.subjectname.match(/^[a-zA-Z0-9-']+$/g)) {
+    return res.json({success: false, msg: "Subject names are alphanumeric (and may contain dashes and apostrophes)"})
+  }
+
   // Still not sure what the cutoff should be
   if (req.params.subjectname.length > 35) {
     return res.json({success: false, msg: 'Subject name is too long'});
