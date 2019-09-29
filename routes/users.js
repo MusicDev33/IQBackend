@@ -30,11 +30,11 @@ router.post('/register', accountLimiter, (req, res, next) => {
     return res.json({success: false, msg: "You can't have special characters in your handle."})
   }
 
-  if (!req.body.firstName.match(/^[a-zA-Z0-9_-']+$/g) || !req.body.lastName.match(/^[a-zA-Z0-9_-']+$/g)) {
+  if (!req.body.firstName.match(/^[a-zA-Z0-9_\-']+$/g) || !req.body.lastName.match(/^[a-zA-Z0-9_\-']+$/g)) {
     return res.json({success: false, msg: "You can't have special characters in your name."})
   }
 
-  if (!req.body.phoneNumber.match(/^[0-9-]+$/g)) {
+  if (req.body.phoneNumber && !req.body.phoneNumber.match(/^[0-9\-]+$/g)) {
     return res.json({success: false, msg: "You can only have numbers in your phone number."})
   }
 
@@ -88,7 +88,7 @@ router.post('/authenticate', loginLimiter, (req, res, next) => {
   User.getUserByEmail(email, (err, user) => {
     if (err) throw err;
     if (!user){
-      res.json({success: false, msg: "Couldn't find user, sorry bro."});
+      res.json({success: false, msg: "User doesn't exist. Creating an account can fix that."});
     } else {
       User.comparePassword(password, user.password, (err, isMatch) => {
         if(err) throw err;

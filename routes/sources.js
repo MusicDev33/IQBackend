@@ -104,7 +104,7 @@ router.get('/:sourceid/:tagname/questions', (req, res, next) => {
 router.post('/add', (req, res, next) => {
   const body = req.body;
 
-  if (!body.name.match(/^[a-zA-Z0-9-']+$/g)) {
+  if (!body.name.match(/^[a-zA-Z0-9\-']+$/g)) {
     return res.json({success: false, msg: "Source names are alphanumeric (and may contain dashes and apostrophes)"})
   }
 
@@ -140,7 +140,7 @@ router.delete('/:sourceid', (req, res, next) => {
 });
 
 router.post('/:sourceid/tags/:tagname', (req, res, next) => {
-  if (!req.params.tagname.match(/^[a-zA-Z0-9_-]+$/g)) {
+  if (!req.params.tagname.match(/^[a-zA-Z0-9_\-]+$/g)) {
     return res.json({success: false, msg: "Tags must be alphanumeric, but can also have dashes"})
   }
 
