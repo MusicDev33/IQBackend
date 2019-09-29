@@ -115,14 +115,14 @@ router.post('/add', (req, res, next) => {
     posterID: 'no id',
     views: 0,
     sourceURL: Source.sourceTextToURL(body.name), // Use a function to create this
-    tags: [],
-    edition: body.edition,
+    tags: body.tags.length ? body.tags : [],
+    edition: body.edition ? body.edition : '',
     author: body.author ? body.author : ''
   })
 
   Source.saveSource(newSource, (err, savedSource) => {
     if (savedSource) {
-      res.json({success: true, msg: 'Successfully saved source!'});
+      res.json({success: true, msg: 'Successfully saved source!', source: source});
     } else {
       res.json({success: false, msg: 'Couldn\'t save source.'})
     }
