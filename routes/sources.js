@@ -104,7 +104,7 @@ router.get('/:sourceid/:tagname/questions', (req, res, next) => {
 router.post('/add', (req, res, next) => {
   const body = req.body;
 
-  if (!body.name.match(/^[a-zA-Z0-9\-']+$/g)) {
+  if (!body.name.match(/^[a-zA-Z0-9\-' ]+$/g)) {
     return res.json({success: false, msg: "Source names are alphanumeric (and may contain dashes and apostrophes)"})
   }
 
@@ -115,14 +115,14 @@ router.post('/add', (req, res, next) => {
     posterID: 'no id',
     views: 0,
     sourceURL: Source.sourceTextToURL(body.name), // Use a function to create this
-    tags: body.tags.length ? body.tags : [],
+    tags: body.tags ? body.tags : [],
     edition: body.edition ? body.edition : '',
     author: body.author ? body.author : ''
   })
 
   Source.saveSource(newSource, (err, savedSource) => {
     if (savedSource) {
-      res.json({success: true, msg: 'Successfully saved source!', source: source});
+      res.json({success: true, msg: 'Successfully saved source!', source: savedSource});
     } else {
       res.json({success: false, msg: 'Couldn\'t save source.'})
     }
