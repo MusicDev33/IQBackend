@@ -25,7 +25,7 @@ router.post('/add', (req, res, next) => {
     views: 1,
     details: '',
     time: '',
-    tags: []
+    tags: req.body.tags ? req.body.tags : []
   });
 
   Question.addQuestion(newQuestion, (err, question) => {
