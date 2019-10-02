@@ -38,6 +38,10 @@ router.post('/register', accountLimiter, (req, res, next) => {
     return res.json({success: false, msg: "You can only have numbers in your phone number."})
   }
 
+  if (req.body.password.length < 8) {
+    return res.json(success: false, msg: 'Your password must have 8 characters in it!')
+  }
+
   User.getUserByHandle(req.body.handle, (err, user) => {
     if (err) throw err;
     if (user){
