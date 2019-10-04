@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const StringUtils = require("../ProtoChanges/string");
 
 const QuestionSchema = mongoose.Schema({
   questionText: {
@@ -97,6 +98,23 @@ module.exports.findBySourceName = function(sourceName, callback){
       callback(null, questions);
     } else {
       callback(null, null);
+    }
+  })
+}
+
+module.exports.searchByName = function(searchTerm, callback){
+  const regexp = '\\b(' + StringUtils.sanitize(searchTerm) + ')\\b';
+  Question.find({questionText: {$regex : regexp, $options: 'i'}}).lean().exec((err, questions) => {
+    if (err) throw err;
+    if (questions) {
+      let returnQuestions = [];
+      questions.forEach(question => {
+        let questionObj = {urlText: question.urlText, name: question.questionText}
+        returnQuestions.push(questionObj);
+      })
+      callback(null, returnQuestions)
+    } else {
+      callback(null, null)
     }
   })
 }

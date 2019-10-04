@@ -245,6 +245,24 @@ module.exports.addSource = function(userid, source, callback) {
   })
 }
 
+module.exports.searchByName = function(searchTerm, callback) {
+  const regexp = '^' + StringUtils.sanitize(searchTerm);
+  User.find({ name: {$regex : regexp, $options: 'i'}}).lean().exec((err, users) => {
+    if (err) throw err;
+    // Will return an array, regardless of whether or not it's empty
+    if (users) {
+      let returnUsers = [];
+      users.forEach(user => {
+        const userObj = {name: user.name, handle: user.handle}
+        returnUsers.push(userObj);
+      })
+      callback(null, returnUsers);
+    } else {
+      callback(null, null);
+    }
+  });
+}
+
 module.exports.addUser = function(newUser, callback){
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {

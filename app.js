@@ -73,12 +73,14 @@ const questions = require('./routes/questions');
 const subjects = require('./routes/subjects');
 const sources = require('./routes/sources');
 const feed = require('./routes/feed/feed');
+const search = require('./routes/search/search');
 
 app.use(apiBase + 'users', users);
 app.use(apiBase + 'questions', questions);
 app.use(apiBase + 'subjects', subjects);
 app.use(apiBase + 'sources', sources);
 app.use(apiBase + 'feed', feed);
+app.use(apiBase + 'search', search);
 
 // create public folder with the index.html when finished
 app.use(express.static(path.join(__dirname, 'public')))
