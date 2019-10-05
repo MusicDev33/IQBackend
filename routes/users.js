@@ -99,6 +99,7 @@ router.post('/authenticate', loginLimiter, (req, res, next) => {
         if (!isMatch) {
           res.json({success: false, msg: "Wrong password!"})
         } else {
+          user.password = '';
           const jwtToken = jwt.sign(user.toJSON(), config.secret, {
             expiresIn: 28800 // 8 hours
           });
@@ -111,7 +112,6 @@ router.post('/authenticate', loginLimiter, (req, res, next) => {
               name: user.name,
               phoneNumber: user.phoneNumber,
               handle: user.handle,
-              knowledge: user.knowledge,
               customization: user.customization
             }
 
@@ -215,7 +215,7 @@ router.get('/profile/:handle', (req, res, next) => {
   User.getUserByHandle(req.params.handle, (err, user) => {
     if (err) throw err;
     if (user){
-      user.password = ""
+      user.password = '';
       console.log("Profile")
       console.log(user)
       res.json({success: true, msg: "Successfully found user.", user: user})
@@ -247,9 +247,9 @@ router.get('/:userid/answers', (req, res, next) => {
   })
 });
 
-router.get('/profile', passport.authenticate('jwt', {session:false}),(req, res, next) => {
-  req.user.password = ""
-  res.json({user: req.user})
+router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+  req.user.password = '';
+  res.json({user: req.user});
 });
 
 router.post('/:userid/knowledge/:subject', (req, res, next) => {
