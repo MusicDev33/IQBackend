@@ -249,7 +249,7 @@ router.get('/:userid/answers', (req, res, next) => {
 
 router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
   req.user.password = '';
-  res.json({user: req.user});
+  res.json({success: true, user: req.user});
 });
 
 router.post('/:userid/knowledge/:subject', (req, res, next) => {
