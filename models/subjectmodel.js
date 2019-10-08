@@ -19,6 +19,10 @@ const SubjectSchema = mongoose.Schema({
   },
   subjectURL:{
     type: String
+  },
+  type: {
+    type: String,
+    default: 'subject'
   }
 });
 

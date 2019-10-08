@@ -45,6 +45,10 @@ const UserSchema = mongoose.Schema({
   },
   knowledge: {
     type: Object
+  },
+  type: {
+    type: String,
+    default: 'user'
   }
 }, { minimize: false });
 

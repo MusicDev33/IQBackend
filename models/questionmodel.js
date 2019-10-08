@@ -40,6 +40,10 @@ const QuestionSchema = mongoose.Schema({
   },
   tags: {
     type: Array
+  },
+  type: {
+    type: String,
+    default: 'question'
   }
 });
 

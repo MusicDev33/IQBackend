@@ -28,6 +28,10 @@ const SourceSchema = mongoose.Schema({
   },
   edition: {
     type: Number
+  },
+  type: {
+    type: String,
+    default: 'source'
   }
 });
 
