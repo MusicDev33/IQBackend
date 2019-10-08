@@ -107,7 +107,7 @@ module.exports.findBySourceName = function(sourceName, callback){
 }
 
 module.exports.searchByName = function(searchTerm, callback){
-  const regexp = '\\b(' + StringUtils.sanitize(searchTerm) + ')\\b';
+  const regexp = '\\b(' + searchTerm + ')\\b';
   Question.find({questionText: {$regex : regexp, $options: 'i'}}).lean().exec((err, questions) => {
     if (err) throw err;
     if (questions) {

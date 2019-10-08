@@ -14,7 +14,7 @@ const StringUtils = require('../../ProtoChanges/string')
 
 // REWRITE
 router.get('/everything/:searchterm', (req, res, next) => {
-  const searchTerm = req.params.searchterm;
+  const searchTerm = req.params.searchterm.replace(/[-]+/, ' ');
   User.searchByName(searchTerm, (err, users) => {
     Source.searchByName(searchTerm, (err, sources) => {
       Subject.searchByName(searchTerm, (err, subjects) => {

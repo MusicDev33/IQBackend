@@ -38,7 +38,7 @@ const SourceSchema = mongoose.Schema({
 const Source = module.exports = mongoose.model('Source', SourceSchema);
 
 module.exports.searchByName = function(sourceString, callback) {
-  const regexp = '^' + StringUtils.sanitize(sourceString);
+  const regexp = '^' + sourceString;
   Source.find({ sourceURL: {$regex : regexp, $options: 'i'}}, (err, sources) => {
     if (err) throw err;
     // Will return an array, regardless of whether or not it's empty
