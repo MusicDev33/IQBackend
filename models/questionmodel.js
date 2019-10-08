@@ -113,7 +113,7 @@ module.exports.searchByName = function(searchTerm, callback){
     if (questions) {
       let returnQuestions = [];
       questions.forEach(question => {
-        let questionObj = {urlText: question.urlText, name: question.questionText}
+        let questionObj = {urlText: question.urlText, name: question.questionText, type: question.type}
         returnQuestions.push(questionObj);
       })
       callback(null, returnQuestions)

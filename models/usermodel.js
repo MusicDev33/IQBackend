@@ -257,7 +257,7 @@ module.exports.searchByName = function(searchTerm, callback) {
     if (users) {
       let returnUsers = [];
       users.forEach(user => {
-        const userObj = {name: user.name, handle: user.handle}
+        const userObj = {name: user.name, handle: user.handle, type: user.type}
         returnUsers.push(userObj);
       })
       callback(null, returnUsers);
