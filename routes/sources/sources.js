@@ -1,15 +1,18 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose');
-const User = require('../models/usermodel')
-const Question = require('../models/questionmodel')
-const Answer = require('../models/answermodel')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
-const AutoRes = require('../RouteUtils/autores')
-const config = require('../config/database')
-const Source = require('../models/sourcemodel')
-const StringUtils = require('../ProtoChanges/string')
+const AutoRes = require('../../RouteUtils/autores')
+const config = require('../../config/database')
+const StringUtils = require('../../ProtoChanges/string')
+
+const modPath = require('../modelpath')
+const modelPath = modPath.MODEL_PATH;
+const User = require(modelPath + 'usermodel')
+const Question = require(modelPath + 'questionmodel')
+const Source = require(modelPath + 'sourcemodel')
+const Subject = require(modelPath + 'subjectmodel')
 
 router.get('/', (req, res, next) => {
   Source.find({}, (err, sources) => {

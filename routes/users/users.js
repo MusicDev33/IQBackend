@@ -1,18 +1,20 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../models/usermodel')
-const Question = require('../models/questionmodel')
-const Answer = require('../models/answermodel')
-const Subject = require('../models/subjectmodel')
-const Source = require('../models/sourcemodel')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const AutoRes = require('../RouteUtils/autores')
-const config = require('../config/database')
-const StringUtils = require('../ProtoChanges/string')
-const Location = require('../models/locationmodel')
+const AutoRes = require('../../RouteUtils/autores')
+const config = require('../../config/database')
+const StringUtils = require('../../ProtoChanges/string')
+const Location = require('../../models/locationmodel')
 const rateLimit = require('express-rate-limit');
+
+const modPath = require('../modelpath')
+const modelPath = modPath.MODEL_PATH;
+const User = require(modelPath + 'usermodel')
+const Question = require(modelPath + 'questionmodel')
+const Source = require(modelPath + 'sourcemodel')
+const Subject = require(modelPath + 'subjectmodel')
 
 //Register
 const accountLimiter = rateLimit({

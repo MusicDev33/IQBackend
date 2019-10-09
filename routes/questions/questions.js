@@ -1,12 +1,15 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../models/usermodel')
-const Question = require('../models/questionmodel')
-const Answer = require('../models/answermodel')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
-const AutoRes = require('../RouteUtils/autores')
-const Vote = require('../models/votemodel')
+const modPath = require('../modelpath')
+const AutoRes = require('../../RouteUtils/autores')
+
+const modelPath = modPath.MODEL_PATH;
+const Vote = require(modelPath + 'votemodel')
+const User = require(modelPath + 'usermodel')
+const Question = require(modelPath + 'questionmodel')
+const Answer = require(modelPath + 'answermodel')
 
 // Find a way to make this :questionurl instead of /add
 router.post('/add', (req, res, next) => {
