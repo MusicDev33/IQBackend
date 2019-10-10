@@ -44,12 +44,12 @@ module.exports.registerUser = function(req, res, next) {
   User.getUserByHandle(req.body.handle, (err, user) => {
     if (err) throw err;
     if (user){
-      res.json({success: false, msg: "There's already a user by that name!"});
+      return res.json({success: false, msg: "There's already a user by that name!"});
     } else {
       User.getUserByEmail(req.body.email, (err, user) => {
         if (err) throw err;
         if (user){
-          res.json({success: false, msg: "This email is already associated with an account."})
+          return res.json({success: false, msg: "This email is already associated with an account."})
         } else {
           let newUser = new User({
             fbTokens: [],
@@ -87,19 +87,19 @@ module.exports.authorizeUser = function(req, res, next) {
   User.getUserByEmail(email, (err, user) => {
     if (err) throw err;
     if (!user){
-      res.json({success: false, msg: "User doesn't exist. Creating an account can fix that."});
+      return res.json({success: false, msg: "User doesn't exist. Creating an account can fix that."});
     } else {
       User.comparePassword(password, user.password, (err, isMatch) => {
-        if(err) throw err;
+        if (err) throw err;
         if (!isMatch) {
-          res.json({success: false, msg: "Wrong password!"})
+          return res.json({success: false, msg: "Wrong password!"})
         } else {
           user.password = '';
           const jwtToken = jwt.sign(user.toJSON(), config.secret, {
             expiresIn: 28800 // 8 hours
           });
 
-          res.json({
+          return res.json({
             success: true,
             token: "JWT " + jwtToken,
             user: {
