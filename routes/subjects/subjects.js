@@ -1,13 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../models/usermodel')
-const Question = require('../models/questionmodel')
-const Answer = require('../models/answermodel')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
-const AutoRes = require('../RouteUtils/autores')
-const Subject = require('../models/subjectmodel')
-const StringUtils = require('../ProtoChanges/string')
+const AutoRes = require('../../RouteUtils/autores')
+const StringUtils = require('../../ProtoChanges/string')
+
+const modPath = require('../modelpath')
+const modelPath = modPath.MODEL_PATH;
+const User = require(modelPath + 'usermodel')
+const Question = require(modelPath + 'questionmodel')
+const Source = require(modelPath + 'sourcemodel')
+const Subject = require(modelPath + 'subjectmodel')
 
 
 router.post('/:subjectname', (req, res, next) => {

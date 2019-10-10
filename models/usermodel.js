@@ -45,6 +45,10 @@ const UserSchema = mongoose.Schema({
   },
   knowledge: {
     type: Object
+  },
+  type: {
+    type: String,
+    default: 'user'
   }
 }, { minimize: false });
 
@@ -246,14 +250,14 @@ module.exports.addSource = function(userid, source, callback) {
 }
 
 module.exports.searchByName = function(searchTerm, callback) {
-  const regexp = '^' + StringUtils.sanitize(searchTerm);
+  const regexp = '^' + searchTerm;
   User.find({ name: {$regex : regexp, $options: 'i'}}).lean().exec((err, users) => {
     if (err) throw err;
     // Will return an array, regardless of whether or not it's empty
     if (users) {
       let returnUsers = [];
       users.forEach(user => {
-        const userObj = {name: user.name, handle: user.handle}
+        const userObj = {name: user.name, handle: user.handle, type: user.type}
         returnUsers.push(userObj);
       })
       callback(null, returnUsers);

@@ -40,6 +40,10 @@ const QuestionSchema = mongoose.Schema({
   },
   tags: {
     type: Array
+  },
+  type: {
+    type: String,
+    default: 'question'
   }
 });
 
@@ -103,13 +107,13 @@ module.exports.findBySourceName = function(sourceName, callback){
 }
 
 module.exports.searchByName = function(searchTerm, callback){
-  const regexp = '\\b(' + StringUtils.sanitize(searchTerm) + ')\\b';
+  const regexp = '\\b(' + searchTerm + ')\\b';
   Question.find({questionText: {$regex : regexp, $options: 'i'}}).lean().exec((err, questions) => {
     if (err) throw err;
     if (questions) {
       let returnQuestions = [];
       questions.forEach(question => {
-        let questionObj = {urlText: question.urlText, name: question.questionText}
+        let questionObj = {urlText: question.urlText, name: question.questionText, type: question.type}
         returnQuestions.push(questionObj);
       })
       callback(null, returnQuestions)

@@ -43,3 +43,7 @@ module.exports.urlToName = function(url) {
 module.exports.sanitize = function(str) {
   return str.replace(/[\. ,:;\'\"=_*^!@|<>&#+()-]+/g, "-");
 }
+
+module.exports.dashesToSpaces = function(str) {
+  return str.replace(/[-]+/g, " ");
+}
