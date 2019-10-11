@@ -146,12 +146,34 @@ router.post('/:questionURL/answers/add', (req, res, next) => {
     posterHandle: req.body.posterHandle,
     questionText: req.body.questionText
   })
-  Answer.addAnswer(answer, (err, savedAnswer) => {
-    if (err) throw err;
-    if (savedAnswer){
-      res.json({success: true, msg: "Answer has been added!"})
+  Question.addAnswerToQuestion(req.params.questionURL, (err, question) => {
+    if (question) {
+      Answer.addAnswer(answer, (err, savedAnswer) => {
+        if (err) throw err;
+        if (savedAnswer) {
+          res.json({success: true, msg: "Answer has been added!"})
+        } else {
+          res.json({success: false, msg: "Answer couldn't be added for some reason."})
+        }
+      })
     } else {
-      res.json({success: false, msg: "Answer couldn't be added for some reason."})
+      res.json({success: false, msg: 'Couldn\'t find question...'})
+    }
+  })
+})
+
+router.delete('/:questionURL/answers/:answerID', (req, res, next) => {
+  Question.removeAnswerFromQuestion(req.params.questionURL, (err, question) => {
+    if (question) {
+      Answer.removeAnswer(req.params.answerID, (err, answer) => {
+        if (answer) {
+          res.json({success: true, msg: 'Answer deleted'})
+        } else {
+          res.json({success: false, msg: 'Couldn\'t delete answer'})
+        }
+      })
+    } else {
+      res.json({success: false, msg:'Couldn\'t find question'})
     }
   })
 })
