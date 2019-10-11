@@ -70,7 +70,7 @@ router.get('/search/:searchterms', (req, res, next) => {
 router.get('/:subjectname/questions', (req, res, next) => {
   let subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' ');
-  Question.find({subject: subjectName}, (err, questions) => {
+  Question.find({subject: subjectName}).sort({_id: -1}).exec((err, questions) => {
     if (err) throw err;
     if (questions.length){
       res.json({success: true, questions: questions});

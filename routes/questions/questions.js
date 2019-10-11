@@ -151,7 +151,7 @@ router.post('/:questionURL/answers/add', (req, res, next) => {
       Answer.addAnswer(answer, (err, savedAnswer) => {
         if (err) throw err;
         if (savedAnswer) {
-          res.json({success: true, msg: "Answer has been added!"})
+          res.json({success: true, msg: "Answer has been added!", answer: savedAnswer})
         } else {
           res.json({success: false, msg: "Answer couldn't be added for some reason."})
         }
@@ -167,7 +167,7 @@ router.delete('/:questionURL/answers/:answerID', (req, res, next) => {
     if (question) {
       Answer.removeAnswer(req.params.answerID, (err, answer) => {
         if (answer) {
-          res.json({success: true, msg: 'Answer deleted'})
+          res.json({success: true, msg: 'Answer deleted', answer: answer});
         } else {
           res.json({success: false, msg: 'Couldn\'t delete answer'})
         }
