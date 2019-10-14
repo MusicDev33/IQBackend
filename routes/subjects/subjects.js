@@ -13,7 +13,7 @@ const Source = require(modelPath + 'sourcemodel')
 const Subject = require(modelPath + 'subjectmodel')
 
 
-router.post('/:subjectname', (req, res, next) => {
+router.post('/:subjectname', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 
   if (req.params.subjectname.length < 3) {
     return res.json({success: false, msg: 'Subject name is too short'});
