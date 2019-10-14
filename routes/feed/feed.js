@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const passport = require('passport')
 const FeedModule = require('../../feed/feedv1')
 
 router.get('/:userid', passport.authenticate('jwt', {session:false}), (req, res, next) => {
