@@ -132,7 +132,7 @@ router.post('/add', (req, res, next) => {
   });
 });
 
-router.delete('/:sourceid', (req, res, next) => {
+router.delete('/:sourceid', passport.authenticate('gaia', {session:false}), (req, res, next) => {
   Source.deleteSource(req.params.sourceid, (err, deletedSource) => {
     if (deletedSource) {
       res.json({success: true, msg: 'Source deleted successfully!'})
@@ -157,7 +157,7 @@ router.post('/:sourceid/tags/:tagname', (req, res, next) => {
   })
 })
 
-router.delete('/:sourceid/tags/:tagname', (req, res, next) => {
+router.delete('/:sourceid/tags/:tagname', passport.authenticate('gaia', {session:false}), (req, res, next) => {
   const tagName = StringUtils.urlToName(req.params.tagname);
   Source.removeTag(req.params.sourceid, tagName, (err, updatedSource) => {
     if (updatedSource) {
@@ -168,7 +168,7 @@ router.delete('/:sourceid/tags/:tagname', (req, res, next) => {
   })
 })
 
-router.delete('/:sourceid/tags/', (req, res, next) => {
+router.delete('/:sourceid/tags/', passport.authenticate('gaia', {session:false}), (req, res, next) => {
   Source.deleteTags(req.params.sourceid, (err, updatedSource) => {
     if (updatedSource) {
       res.json({success: true, source: updatedSource});

@@ -53,6 +53,9 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 require('./config/passport')(passport)
+require('./config/adminpass').chaos(passport)
+require('./config/adminpass').gaia(passport)
+require('./config/adminpass').kronos(passport)
 
 const acceptedAgents = ['IQAPIv1', 'IQiOSv1', 'IQAndroidv1']
 

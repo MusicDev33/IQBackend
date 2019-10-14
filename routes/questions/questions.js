@@ -40,7 +40,7 @@ router.post('/add', passport.authenticate('jwt', {session:false}), (req, res, ne
   });
 });
 
-router.delete('/', (req, res, next) => {
+router.delete('/', passport.authenticate('gaia', {session:false}), (req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     Question.deleteAll((err, deleted) => {
       if (deleted) {
