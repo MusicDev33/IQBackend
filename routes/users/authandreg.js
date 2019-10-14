@@ -9,7 +9,7 @@ const User = require(modelPath + 'usermodel')
 // Rate Limits
 module.exports.registerLimit = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour window
-  max: 100, // start blocking after 5 requests
+  max: 100, // start blocking after 100 requests
   message:
     "Too many accounts created from this IP, please try again after an hour"
 });

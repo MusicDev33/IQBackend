@@ -12,7 +12,7 @@ const Question = require(modelPath + 'questionmodel')
 const Answer = require(modelPath + 'answermodel')
 
 // Find a way to make this :questionurl instead of /add
-router.post('/add', (req, res, next) => {
+router.post('/add', passport.authenticate('jwt', {session:false}), (req, res, next) => {
   const questionURL = Question.questionTextToURL(req.body.question);
 
   let newQuestion = new Question({
@@ -52,7 +52,7 @@ router.delete('/', (req, res, next) => {
   }
 })
 
-router.post("/:questionid/:userid/:answerid/votes/:vote", (req, res, next) => {
+router.post("/:questionid/:userid/:answerid/votes/:vote", passport.authenticate('jwt', {session:false}), (req, res, next) => {
   Vote.addVote(req.params.userid, req.params.answerid, Number(req.params.vote), req.params.questionid, (err, newVote, oldVote) => {
     Answer.adjustVotes(req.params.answerid, newVote, oldVote, (err, newAnswer) => {
       if (newAnswer){
@@ -135,7 +135,7 @@ router.get('/:questionid/answers/votes/:userid', (req, res, next) => {
   })
 })
 
-router.post('/:questionURL/answers/add', (req, res, next) => {
+router.post('/:questionURL/answers/add', passport.authenticate('jwt', {session:false}), (req, res, next) => {
   let answer = new Answer({
     questionURL: req.params.questionURL,
     answerText: req.body.answerText,
@@ -162,7 +162,7 @@ router.post('/:questionURL/answers/add', (req, res, next) => {
   })
 })
 
-router.delete('/:questionURL/answers/:answerID', (req, res, next) => {
+router.delete('/:questionURL/answers/:answerID', passport.authenticate('jwt', {session:false}), (req, res, next) => {
   Question.removeAnswerFromQuestion(req.params.questionURL, (err, question) => {
     if (question) {
       Answer.removeAnswer(req.params.answerID, (err, answer) => {
