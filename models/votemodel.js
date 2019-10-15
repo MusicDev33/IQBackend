@@ -23,22 +23,22 @@ const Vote = module.exports = mongoose.model('Vote', VoteSchema);
 module.exports.addVote = function(userID, answerID, voteInt, questionID, callback){
   Vote.findOne({userid: userID, answerid: answerID}, (err, oldVote) => {
     if (err) throw err;
-    if (oldVote){
+    if (oldVote) {
       console.log("Vote", oldVote.vote)
       if (oldVote.vote === voteInt){
         callback(null, null, null)
-      }else{
+      } else {
         Vote.findOneAndUpdate({userid: userID, answerid: answerID},
           {vote: voteInt}, {new: true}, (err, updatedVote) => {
             if (err) throw err;
             if (updatedVote){
               callback(null, updatedVote.vote, oldVote.vote)
-            }else{
+            } else {
               callback(null, null, null)
             }
           })
       }
-    }else{
+    } else {
       newVote = new Vote({
         userid: userID,
         answerid: answerID,
@@ -47,12 +47,19 @@ module.exports.addVote = function(userID, answerID, voteInt, questionID, callbac
       })
       newVote.save( (err, savedVote) => {
         if (err) throw err;
-        if (savedVote){
+        if (savedVote) {
           callback(null, savedVote.vote, null)
-        }else{
+        } else {
           callback(null, null, null)
         }
       })
     }
+  })
+}
+
+module.exports.deleteAnswerVotes = function(answerID, callback) {
+  Vote.deleteMany({answerid: answerID}, (err, _) => {
+    if (err) throw err;
+    callback(null, true);
   })
 }

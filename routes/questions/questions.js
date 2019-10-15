@@ -40,6 +40,19 @@ router.post('/add', passport.authenticate('jwt', {session:false}), (req, res, ne
   });
 });
 
+router.post('/:questionid/:userid/:answerid/vote', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+  console.log('voted')
+  Vote.addVote(req.params.userid, req.params.answerid, Number(req.body.vote), req.params.questionid, (err, newVote, oldVote) => {
+    Answer.adjustVotes(req.params.answerid, newVote, oldVote, (err, newAnswer) => {
+      if (newAnswer){
+        res.json({success: true, msg: "Voted successfully!"})
+      } else {
+        res.json({success: false, msg: "Vote failed..."})
+      }
+    })
+  })
+})
+
 router.delete('/', passport.authenticate('gaia', {session:false}), (req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     Question.deleteAll((err, deleted) => {
@@ -50,18 +63,6 @@ router.delete('/', passport.authenticate('gaia', {session:false}), (req, res, ne
       }
     })
   }
-})
-
-router.post("/:questionid/:userid/:answerid/votes/:vote", passport.authenticate('jwt', {session:false}), (req, res, next) => {
-  Vote.addVote(req.params.userid, req.params.answerid, Number(req.params.vote), req.params.questionid, (err, newVote, oldVote) => {
-    Answer.adjustVotes(req.params.answerid, newVote, oldVote, (err, newAnswer) => {
-      if (newAnswer){
-        res.json({success: true, msg: "Voted successfully!"})
-      } else {
-        res.json({success: false, msg: "Vote failed..."})
-      }
-    })
-  })
 })
 
 router.get('/:questionURL', (req, res, next) => {
@@ -167,7 +168,9 @@ router.delete('/:questionURL/answers/:answerID', passport.authenticate('jwt', {s
     if (question) {
       Answer.removeAnswer(req.params.answerID, (err, answer) => {
         if (answer) {
-          res.json({success: true, msg: 'Answer deleted', answer: answer});
+          Vote.deleteAnswerVotes(req.params.answerID, (err, deleted) => {
+            res.json({success: true, msg: 'Answer deleted', answer: answer})
+          });
         } else {
           res.json({success: false, msg: 'Couldn\'t delete answer'})
         }
