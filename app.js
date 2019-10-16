@@ -74,10 +74,10 @@ app.use(checkAgent);
 const users = require('./routes/users/routes');
 const questions = require('./routes/questions/questions');
 const subjects = require('./routes/subjects/routes');
-const sources = require('./routes/sources/sources');
+const sources = require('./routes/sources/routes');
 const feed = require('./routes/feed/routes');
 const search = require('./routes/search/routes');
-const admin = require('./routes/admin/admins');
+const admin = require('./routes/admin/routes');
 
 app.use(apiBase + 'users', users);
 app.use(apiBase + 'questions', questions);
