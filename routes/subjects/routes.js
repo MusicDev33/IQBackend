@@ -11,9 +11,9 @@ router.get('/:subjectname/questions', SubjectModule.getSubjectQuestions);
 router.get('/:subjectname/count', SubjectModule.getSubjectQuestionCount);
 
 // Create a subject
-router.post('/:subjectname', SubjectModule.createSubject);
+router.post('/:subjectname', passport.authenticate('jwt', {session: false}), SubjectModule.createSubject);
 
 // Search subjects
-router.post('search/:searchterms', SubjectModule.searchSubject);
+router.get('search/:searchterms', SubjectModule.searchSubject);
 
 module.exports = router;
