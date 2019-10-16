@@ -76,7 +76,7 @@ const questions = require('./routes/questions/questions');
 const subjects = require('./routes/subjects/routes');
 const sources = require('./routes/sources/sources');
 const feed = require('./routes/feed/routes');
-const search = require('./routes/search/search');
+const search = require('./routes/search/routes');
 const admin = require('./routes/admin/admins');
 
 app.use(apiBase + 'users', users);
