@@ -44,6 +44,10 @@ const QuestionSchema = mongoose.Schema({
   type: {
     type: String,
     default: 'question'
+  },
+  answerNum: {
+    type: Number,
+    default: 0
   }
 });
 
@@ -56,9 +60,9 @@ module.exports.questionTextToURL = function(questionText){
   for (let i = 0; i < questionText.length; i++) {
     if (specialChars.indexOf(questionText[i]) > -1){
       urlText += "-"
-    }else if (questionText[i] == "?"){
+    } else if (questionText[i] == "?") {
 
-    }else{
+    } else {
       urlText += questionText[i]
     }
   }
@@ -91,6 +95,46 @@ module.exports.addQuestion = function(question, callback){
           callback(null, null)
         }
       });
+    }
+  })
+}
+
+module.exports.addAnswerToQuestion = function(questionURL, callback) {
+  Question.findOne({urlText: questionURL}, (err, foundQuestion) => {
+    if (err) throw err;
+    if (foundQuestion) {
+      foundQuestion.answerNum += 1;
+      foundQuestion.markModified('answerNum');
+      foundQuestion.save((err, savedQuestion) => {
+        if (err) throw err;
+        if (savedQuestion) {
+          callback(null, savedQuestion);
+        } else {
+          callback(null, null);
+        }
+      })
+    } else {
+      callback(null, null);
+    }
+  })
+}
+
+module.exports.removeAnswerFromQuestion = function(questionURL, callback) {
+  Question.findOne({urlText: questionURL}, (err, foundQuestion) => {
+    if (err) throw err;
+    if (foundQuestion) {
+      foundQuestion.answerNum -= 1;
+      foundQuestion.markModified('answerNum');
+      foundQuestion.save((err, savedQuestion) => {
+        if (err) throw err;
+        if (savedQuestion) {
+          callback(null, savedQuestion);
+        } else {
+          callback(null, null);
+        }
+      })
+    } else {
+      callback(null, null);
     }
   })
 }

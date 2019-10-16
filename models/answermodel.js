@@ -64,10 +64,7 @@ module.exports.getAnswersByQuestionURL = function(questionURL, callback){
 module.exports.adjustVotes = function(answerID, newVote, oldVote, callback){
   Answer.findOne({_id: answerID}, (err, answer) => {
     if (err) throw err;
-    if (answer){
-      console.log("Answer found")
-      console.log("NEW:", newVote)
-      console.log("OLD:", oldVote)
+    if (answer) {
       answer.votes += newVote;
       if (oldVote){
         answer.votes -= oldVote;
@@ -76,12 +73,11 @@ module.exports.adjustVotes = function(answerID, newVote, oldVote, callback){
         if (err) throw err;
         if (updatedAnswer){
           callback(null, updatedAnswer)
-        }else{
+        } else {
           callback(null, null)
         }
       })
-    }else{
-      console.log("Answer not found")
+    } else {
       callback(null, null)
     }
   })
@@ -89,4 +85,15 @@ module.exports.adjustVotes = function(answerID, newVote, oldVote, callback){
 
 module.exports.addAnswer = function(answer, callback){
   answer.save(callback)
+}
+
+module.exports.removeAnswer = function(answerID, callback) {
+  Answer.findByIdAndRemove({_id: answerID}, (err, deletedAnswer) => {
+    if (err) throw err;
+    if (deletedAnswer) {
+      callback(null, deletedAnswer);
+    } else {
+      callback(null, null);
+    }
+  })
 }

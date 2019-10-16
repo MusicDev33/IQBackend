@@ -53,6 +53,9 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 require('./config/passport')(passport)
+require('./config/adminpass').chaos(passport)
+require('./config/adminpass').gaia(passport)
+require('./config/adminpass').kronos(passport)
 
 const acceptedAgents = ['IQAPIv1', 'IQiOSv1', 'IQAndroidv1']
 
@@ -68,12 +71,13 @@ const checkAgent = function(req, res, next) {
 app.use(checkAgent);
 
 // Routes
-const users = require('./routes/users/users');
-const questions = require('./routes/questions/questions');
-const subjects = require('./routes/subjects/subjects');
-const sources = require('./routes/sources/sources');
-const feed = require('./routes/feed/feed');
-const search = require('./routes/search/search');
+const users = require('./routes/users/routes');
+const questions = require('./routes/questions/routes');
+const subjects = require('./routes/subjects/routes');
+const sources = require('./routes/sources/routes');
+const feed = require('./routes/feed/routes');
+const search = require('./routes/search/routes');
+const admin = require('./routes/admin/routes');
 
 app.use(apiBase + 'users', users);
 app.use(apiBase + 'questions', questions);
@@ -81,6 +85,8 @@ app.use(apiBase + 'subjects', subjects);
 app.use(apiBase + 'sources', sources);
 app.use(apiBase + 'feed', feed);
 app.use(apiBase + 'search', search);
+
+app.use(apiBase + 'iqad/min', admin);
 
 // create public folder with the index.html when finished
 app.use(express.static(path.join(__dirname, 'public')))
