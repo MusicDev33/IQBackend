@@ -73,7 +73,7 @@ app.use(checkAgent);
 // Routes
 const users = require('./routes/users/users');
 const questions = require('./routes/questions/questions');
-const subjects = require('./routes/subjects/subjects');
+const subjects = require('./routes/subjects/routes');
 const sources = require('./routes/sources/sources');
 const feed = require('./routes/feed/feed');
 const search = require('./routes/search/search');
