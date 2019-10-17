@@ -25,8 +25,8 @@ module.exports.registerUser = function(req, res, next) {
   // Ugh, nested ifs AND callbacks. Can you think of anything worse?
   // P.S. Maybe I just suck at writing decent code...
 
-  if (req.body.handle.indexOf(' ') >= 0 || !req.body.handle.match(/^[a-zA-Z0-9_]+$/g)){
-    return res.json({success: false, msg: "You can't have special characters in your handle."})
+  if (req.body.handle.indexOf(' ') >= 0 || !req.body.handle.match(/^[a-z0-9_]+$/g)){
+    return res.json({success: false, msg: "You can't have special characters in your handle. Letters must be lowercase."})
   }
 
   if (!req.body.firstName.match(/^[a-zA-Z0-9_\-']+$/g) || !req.body.lastName.match(/^[a-zA-Z0-9_\-']+$/g)) {
@@ -82,9 +82,9 @@ module.exports.registerUser = function(req, res, next) {
 }
 
 module.exports.authorizeUser = function(req, res, next) {
-  const email = req.body.email.toLowerCase();
+  const login = req.body.login.toLowerCase();
   const password = req.body.password
-  User.getUserByEmail(email, (err, user) => {
+  User.getUserByLogin(login, (err, user) => {
     if (err) throw err;
     if (!user){
       return res.json({success: false, msg: "User doesn't exist. Creating an account can fix that."});
