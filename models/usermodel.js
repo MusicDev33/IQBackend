@@ -85,6 +85,17 @@ module.exports.changeBio = function(mongoID, bio, callback) {
   })
 }
 
+module.exports.getUserByLogin = function(login, callback) {
+  User.findOne({$or:[ {email: login}, {handle: login} ]}, (err, user) => {
+    if (err) callback(err, null)
+    if (!user){
+      callback(null, null);
+    } else {
+      callback(null, user);
+    }
+  })
+}
+
 module.exports.getUserByEmail = function(email, callback){
   User.findOne({email: email}, (err, user) => {
     if (err) callback(err, null)
