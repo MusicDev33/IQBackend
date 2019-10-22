@@ -35,7 +35,7 @@ mongoose.set('useFindAndModify', false);
 
 // Rest of the app
 const app = express();
-const port = 2999;
+let port = 2999;
 if (process.env.NODE_ENV === 'DEVTEST') {
   port = 3000;
 }
