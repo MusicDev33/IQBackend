@@ -8,10 +8,11 @@ const config = require('./config/database')
 const fs = require('fs');
 const https = require('https');
 const helmet = require('helmet');
+require('dotenv').config();
 
 let apiBase = '/api/v1/';
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'DEVTEST') {
   var privateKey  = fs.readFileSync('/etc/letsencrypt/live/inquantir.com/privkey.pem', 'utf8');
   var certificate = fs.readFileSync('/etc/letsencrypt/live/inquantir.com/cert.pem', 'utf8');
 
@@ -35,6 +36,9 @@ mongoose.set('useFindAndModify', false);
 // Rest of the app
 const app = express();
 const port = 2999;
+if (process.env.NODE_ENV === 'DEVTEST') {
+  port = 3000;
+}
 
 app.use(helmet());
 app.disable('x-powered-by');
@@ -95,10 +99,10 @@ app.get(apiBase + '/', (req, res) => {
   res.status(404).send('404 Error')
 })
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'DEVTEST') {
   var httpsServer = https.createServer(credentials, app)
 }
 
-app.listen(2999, () => {
+app.listen(port, () => {
   console.log('Inquantir Backend started!');
 })
