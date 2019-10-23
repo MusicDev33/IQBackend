@@ -82,6 +82,7 @@ const sources = require('./routes/sources/routes');
 const feed = require('./routes/feed/routes');
 const search = require('./routes/search/routes');
 const admin = require('./routes/admin/routes');
+const feedback = require('./routes/feedback/routes')
 
 app.use(apiBase + 'users', users);
 app.use(apiBase + 'questions', questions);
@@ -89,6 +90,7 @@ app.use(apiBase + 'subjects', subjects);
 app.use(apiBase + 'sources', sources);
 app.use(apiBase + 'feed', feed);
 app.use(apiBase + 'search', search);
+app.use(apiBase + 'feedback', feedback);
 
 app.use(apiBase + 'iqad/min', admin);
 
@@ -104,5 +106,5 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'DEVTEST')
 }
 
 app.listen(port, () => {
-  console.log('Inquantir Backend started!');
+  console.log('Inquantir Backend started in mode \'' + process.env.NODE_ENV + '\'');
 })
