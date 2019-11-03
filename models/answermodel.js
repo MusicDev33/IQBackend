@@ -50,6 +50,17 @@ module.exports.getAnswerByPoster = function(poster, callback){
   })
 }
 
+module.exports.getAnswerById = function(mongoID, callback) {
+  Answer.findById(mongoID, (err, answer) => {
+    if (err) throw err;
+    if (answer) {
+      callback(null, answer)
+    } else {
+      callback(null, null)
+    }
+  })
+}
+
 module.exports.getAnswersByQuestionURL = function(questionURL, callback){
   Answer.find({questionURL: questionURL}).sort({votes: -1}).exec(function(err, docs){
     if (err) throw err;

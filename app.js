@@ -107,4 +107,5 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'DEVTEST')
 
 app.listen(port, () => {
   console.log('Inquantir Backend started in mode \'' + process.env.NODE_ENV + '\'');
+  console.log('Port: ' + port)
 })

@@ -15,6 +15,15 @@ module.exports.deleteAllQuestions = function(req, res, next) {
 }
 
 module.exports.deleteAnswer = function(req, res, next) {
+  Answer.getAnswerById(req.params.answerID, (err, answer) => {
+    if (answer) {
+      if ('' + req.user._id !== '' + answer.posterID) {
+        return res.status(401).json({success: false, msg: 'Not authorized!'})
+      }
+    } else {
+      return res.json({success: false, msg: 'Couldn\'t find answer!'})
+    }
+  })
   Question.removeAnswerFromQuestion(req.params.questionURL, (err, question) => {
     if (question) {
       Answer.removeAnswer(req.params.answerID, (err, answer) => {

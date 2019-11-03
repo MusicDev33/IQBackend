@@ -6,6 +6,9 @@ const User = require(modelPath + 'usermodel')
 const Subject = require(modelPath + 'subjectmodel')
 
 module.exports.addSubjectRoute = function (req, res, next) {
+  if ('' + req.user._id !== '' + req.params.userid) {
+    return res.status(401).json({success: false, msg: 'Not authorized!'})
+  }
   let subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
   Subject.findByName(subjectName, (err, subject) => {
@@ -28,6 +31,9 @@ module.exports.addSubjectRoute = function (req, res, next) {
 }
 
 module.exports.removeSubjectRoute = function (req, res, next) {
+  if ('' + req.user._id !== '' + req.params.userid) {
+    return res.status(401).json({success: false, msg: 'Not authorized!'})
+  }
   let subjectName = StringUtils.titleCase(req.params.subjectname.trim())
   subjectName = subjectName.replace(/-/g, ' '); // replaces dashes with spaces
   User.removeSubject(req.params.userid, subjectName, (err, user) => {
