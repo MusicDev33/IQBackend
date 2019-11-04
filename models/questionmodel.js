@@ -29,9 +29,6 @@ const QuestionSchema = mongoose.Schema({
   votes: {
     type: Number
   },
-  answers: {
-    type: Array
-  },
   details: {
     type: String
   },
@@ -48,6 +45,9 @@ const QuestionSchema = mongoose.Schema({
   answerNum: {
     type: Number,
     default: 0
+  },
+  previewAnswer: {
+    type: Object
   }
 });
 
@@ -72,10 +72,22 @@ module.exports.questionTextToURL = function(questionText){
 module.exports.getQuestionByURL = function(qURL, callback){
   Question.findOne({urlText: qURL}, (err, question) => {
     if (err) callback(err, null)
-    if (!question){
+    if (!question) {
       callback(null, null);
-    }else{
+    } else {
       callback(null, question);
+    }
+  })
+}
+
+module.exports.getQuestionByID = function(qID, callback) {
+  const id = mongoose.Types.ObjectId(qID);
+  Question.findOne({_id: id}, (err, question) => {
+    if (err) throw err;
+    if (question) {
+      callback(null, question)
+    } else {
+      callback(null, null)
     }
   })
 }
@@ -146,6 +158,28 @@ module.exports.findBySourceName = function(sourceName, callback){
       callback(null, questions);
     } else {
       callback(null, null);
+    }
+  })
+}
+
+module.exports.changePreviewAnswer = function(questionURL, answer, callback) {
+  Question.findOneAndUpdate({urlText: questionURL}, {$set:{'previewAnswer': answer}}, (err, oldQuestion) => {
+    if (err) throw err;
+    if (oldQuestion) {
+      callback(null, oldQuestion)
+    } else {
+      callback(null, null)
+    }
+  })
+}
+
+module.exports.idChangePreviewAnswer = function(questionID, answer, callback) {
+  Question.findOneAndUpdate({_id: questionID}, {$set:{'previewAnswer': answer}}, (err, oldQuestion) => {
+    if (err) throw err;
+    if (oldQuestion) {
+      callback(null, oldQuestion)
+    } else {
+      callback(null, null)
     }
   })
 }

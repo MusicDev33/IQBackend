@@ -6,6 +6,9 @@ const User = require(modelPath + 'usermodel')
 const Source = require(modelPath + 'sourcemodel')
 
 module.exports.addSource = function (req, res, next) {
+  if ('' + req.user._id !== '' + req.params.userid) {
+    return res.status(401).json({success: false, msg: 'Not authorized!'})
+  }
   let sourceName = req.params.sourcename.trim();
   sourceName = sourceName.replace(/-/g, ' ');
   Source.findByName(sourceName, (err, source) => {
@@ -30,6 +33,9 @@ module.exports.addSource = function (req, res, next) {
 }
 
 module.exports.removeSource = function (req, res, next) {
+  if ('' + req.user._id !== '' + req.params.userid) {
+    return res.status(401).json({success: false, msg: 'Not authorized!'})
+  }
   let sourceName = StringUtils.titleCase(req.params.sourcename.trim())
   sourceName = sourceName.replace(/-/g, ' '); // replaces dashes with spaces
   User.removeSubject(req.params.userid, sourceName, (err, user) => {

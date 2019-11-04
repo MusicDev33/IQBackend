@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const modPath = require('../modelpath')
 const modelPath = modPath.MODEL_PATH;
 
@@ -7,6 +9,9 @@ const Answer = require(modelPath + 'answermodel')
 
 
 module.exports.createQuestion = function(req, res, next) {
+  if ('' + req.user._id !== req.body.askerID) {
+    return res.status(401).json({success: false, msg: 'Not authorized!'})
+  }
   const questionURL = Question.questionTextToURL(req.body.question);
 
   let newQuestion = new Question({
@@ -36,9 +41,41 @@ module.exports.createQuestion = function(req, res, next) {
 
 // I'm just trying to keep naming consistent, I know this is awkward
 module.exports.createVote = function(req, res, next) {
+  if ('' + req.user._id !== req.params.userid) {
+    return res.status(401).json({success: false, msg: 'Not authorized!'})
+  }
   Vote.addVote(req.params.userid, req.params.answerid, Number(req.body.vote), req.params.questionid, (err, newVote, oldVote) => {
     Answer.adjustVotes(req.params.answerid, newVote, oldVote, (err, newAnswer) => {
       if (newAnswer){
+        Question.getQuestionByID(req.params.questionid, (err, question) => {
+          if (question) {
+            Answer.getAnswersByQuestionURL(question.urlText, (err, answers) => {
+              const highestVoteAnswer = answers.reduce((prev, current) => {
+                  if (+current.id > +prev.id) {
+                      return current;
+                  } else {
+                      return prev;
+                  }
+              });
+
+              const shortenedAnswer = {
+                _id: highestVoteAnswer._id,
+                answerText: highestVoteAnswer.answerText,
+                poster: highestVoteAnswer.poster,
+                posterID: highestVoteAnswer.posterID,
+                posterHandle: highestVoteAnswer.posterHandle
+              }
+              if ('' + question.previewAnswer._id !== '' + highestVoteAnswer._id) {
+                Question.idChangePreviewAnswer(req.params.questionid, shortenedAnswer, (err, saved) => {
+                  if (saved) {
+                    console.log('E.PreviewChange: QuestionID(' + req.params.questionid + '), AnswerID(' + req.params.answerid + ')')
+                  }
+                })
+              }
+            })
+          }
+        })
+        // Question.idChangePreviewAnswer(req.params.questionid, )
         return res.json({success: true, msg: "Voted successfully!"})
       } else {
         return res.json({success: false, msg: "Vote failed..."})
@@ -47,7 +84,11 @@ module.exports.createVote = function(req, res, next) {
   })
 }
 
+// This needs to be shortened...
 module.exports.createAnswer = function(req, res, next) {
+  if ('' + req.user._id !== req.body.posterID) {
+    return res.status(401).json({success: false, msg: 'Not authorized!'})
+  }
   let answer = new Answer({
     questionURL: req.params.questionURL,
     answerText: req.body.answerText,
@@ -58,18 +99,38 @@ module.exports.createAnswer = function(req, res, next) {
     posterHandle: req.body.posterHandle,
     questionText: req.body.questionText
   })
+
+  const shortenedAnswer = {
+    answerText: req.body.answerText,
+    poster: req.body.poster,
+    posterID: req.body.posterID,
+    posterHandle: req.body.posterHandle
+  }
+
+  // Entry to callback hell
   Question.addAnswerToQuestion(req.params.questionURL, (err, question) => {
     if (question) {
-      Answer.addAnswer(answer, (err, savedAnswer) => {
+      Answer.getAnswersByQuestionURL(req.params.questionURL, (err, answers) => {
         if (err) throw err;
-        if (savedAnswer) {
-          res.json({success: true, msg: "Answer has been added!", answer: savedAnswer})
-        } else {
-          res.json({success: false, msg: "Answer couldn't be added for some reason."})
-        }
+        Answer.addAnswer(answer, (err, savedAnswer) => {
+          if (err) throw err;
+          if (savedAnswer) {
+            if (!answers.length) {
+              shortenedAnswer['_id'] = savedAnswer._id;
+              // LOL saved is actually the old question, but I'll treat it like a boolean
+              Question.changePreviewAnswer(req.params.questionURL, shortenedAnswer, (err, saved) => {
+                return res.json({success: true, msg: "Answer has been added!", answer: savedAnswer});
+              })
+            } else {
+              return res.json({success: true, msg: "Answer has been added!", answer: savedAnswer});
+            }
+          } else {
+            return res.json({success: false, msg: "Answer couldn't be added for some reason."})
+          }
+        })
       })
     } else {
-      res.json({success: false, msg: 'Couldn\'t find question...'})
+      return res.json({success: false, msg: 'Couldn\'t find question...'})
     }
   })
 }
