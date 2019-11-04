@@ -22,7 +22,10 @@ const AnswerSchema = mongoose.Schema({
   comments: {
     type: Array
   },
-  questionURL:{
+  questionURL: {
+    type: String
+  },
+  questionID: {
     type: String
   },
   questionText: {
@@ -61,8 +64,21 @@ module.exports.getAnswerById = function(mongoID, callback) {
   })
 }
 
-module.exports.getAnswersByQuestionURL = function(questionURL, callback){
+module.exports.getAnswersByQuestionURL = function(questionURL, callback) {
   Answer.find({questionURL: questionURL}).sort({votes: -1}).exec(function(err, docs){
+    if (err) throw err;
+    if (docs){
+      callback(null, docs);
+    }else{
+      callback(null, null);
+    }
+  })
+}
+
+module.exports.getAnswersByQuestionID = function(questionID, callback) {
+  const id = mongoose.Types.ObjectId(questionID);
+  console.log(id)
+  Answer.find({_id: id}).sort({votes: -1}).exec((err, docs) => {
     if (err) throw err;
     if (docs){
       callback(null, docs);
