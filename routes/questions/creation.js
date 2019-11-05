@@ -141,6 +141,8 @@ module.exports.editAnswer = function(req, res, next) {
       if ('' + question.previewAnswer._id === '' + req.params.answerid) {
         let newAnswer = question.previewAnswer;
         newAnswer.answerText = req.body.newText;
+
+        Question.idChangePreviewAnswer(req.params.questionid, newAnswer, (err, savedQuestion) => {})
       }
     }
   })
