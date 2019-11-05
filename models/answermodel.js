@@ -77,7 +77,6 @@ module.exports.getAnswersByQuestionURL = function(questionURL, callback) {
 
 module.exports.getAnswersByQuestionID = function(questionID, callback) {
   const id = mongoose.Types.ObjectId(questionID);
-  console.log(id)
   Answer.find({_id: id}).sort({votes: -1}).exec((err, docs) => {
     if (err) throw err;
     if (docs){
@@ -110,8 +109,20 @@ module.exports.adjustVotes = function(answerID, newVote, oldVote, callback){
   })
 }
 
-module.exports.addAnswer = function(answer, callback){
+module.exports.addAnswer = function(answer, callback) {
   answer.save(callback)
+}
+
+module.exports.editAnswer = function(answerID, newAnswerText, callback) {
+  const id = mongoose.Types.ObjectId(answerID);
+  Answer.findOneAndUpdate({_id: id}, {answerText: newAnswerText}, {returnOriginal:false}, (err, savedAnswer) => {
+    if (err) throw err;
+    if (savedAnswer) {
+      callback(null, savedAnswer)
+    } else {
+      callback(null, null)
+    }
+  })
 }
 
 module.exports.removeAnswer = function(answerID, callback) {

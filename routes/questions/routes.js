@@ -16,6 +16,7 @@ router.get('/:questionid/answers/votes/:userid',  QuestionModule.getAnswerVotesF
 router.post('/add', passport.authenticate('jwt', {session:false}), QuestionModule.createQuestion);
 router.post('/:questionid/:userid/:answerid/vote', passport.authenticate('jwt', {session:false}),  QuestionModule.createVote)
 router.post('/:questionURL/answers/add', passport.authenticate('jwt', {session:false}),  QuestionModule.createAnswer)
+router.put('/:questionid/answers/:answerid', passport.authenticate('jwt', {session: false}), QuestionModule.editAnswer)
 
 // Destruction
 router.delete('/', passport.authenticate('gaia', {session:false}),  QuestionModule.deleteAllQuestions)

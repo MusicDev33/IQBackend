@@ -134,3 +134,31 @@ module.exports.createAnswer = function(req, res, next) {
     }
   })
 }
+
+module.exports.editAnswer = function(req, res, next) {
+  Question.getQuestionByID(req.params.questionid, (err, question) => {
+    if (question) {
+      if ('' + question.previewAnswer._id === '' + req.params.answerid) {
+        let newAnswer = question.previewAnswer;
+        newAnswer.answerText = req.body.newText;
+      }
+    }
+  })
+
+  Answer.getAnswerById(req.params.answerid, (err, answer) => {
+    if (answer) {
+      if ('' + req.user._id !== '' + answer.posterID) {
+        return res.status(401).json({success: false, msg: 'Not authorized!'})
+      }
+      Answer.editAnswer(req.params.answerid, req.body.newText, (err, savedAnswer) => {
+        if (savedAnswer) {
+          return res.json({success: true, answer: savedAnswer});
+        } else {
+          return res.json({success: false, msg: 'Couldn\'t edit answer...'});
+        }
+      })
+    } else {
+      return res.json({success: false, msg: 'Couldn\'t find answer...'});
+    }
+  })
+}
