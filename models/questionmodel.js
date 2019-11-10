@@ -174,6 +174,7 @@ module.exports.changePreviewAnswer = function(questionURL, answer, callback) {
 }
 
 module.exports.idChangePreviewAnswer = function(questionID, answer, callback) {
+  const id = mongoose.Types.ObjectId(questionID);
   Question.findOneAndUpdate({_id: questionID}, {$set:{'previewAnswer': answer}}, (err, oldQuestion) => {
     if (err) throw err;
     if (oldQuestion) {
