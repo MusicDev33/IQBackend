@@ -1,14 +1,17 @@
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
 import express from 'express';
-const path = require('path');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const passport = require('passport');
-const mongoose = require('mongoose');
-const config = require('../config/database');
-const fs = require('fs');
-const https = require('https');
-const helmet = require('helmet');
-require('dotenv').config();
+import fs from 'fs';
+import helmet from 'helmet';
+import https from 'https';
+import mongoose from 'mongoose';
+import passport from 'passport';
+import path from 'path';
+
+import { dbConfig } from './config/database';
+
+dotenv.config();
 
 let apiBase = '/api/v1/';
 
@@ -23,10 +26,10 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'DEVTEST')
   apiBase = '/v1/';
 }
 
-mongoose.connect(config.database);
+mongoose.connect(dbConfig.database);
 
 mongoose.connection.on('connected', () => {
-  console.log('Database connected: ' + config.database);
+  console.log('Database connected: ' + dbConfig.database);
 });
 
 mongoose.connection.on('error', (err: any) => {

@@ -12,7 +12,16 @@
             "*": [
                 "node_modules/*"
             ]
-        }
+        },
+        "types": [
+          "cors",
+          "dotenv",
+          "express",
+          "helmet",
+          "mongoose",
+          "node",
+          "passport",
+          "passport-jwt"]
     },
     "include": [
         "config/",
@@ -21,7 +30,8 @@
         "models/",
         "ProtoChange/",
         "routes/",
-        "RouteUtils/"
+        "RouteUtils/",
+        "interfaces/"
     ],
     "files": [
       "index.ts"
