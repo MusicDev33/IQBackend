@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 interface IUser extends mongoose.Document {
+  _id: mongoose.Types.ObjectId;
   bio: string;
   credentials: object;
   currentSources: string[];

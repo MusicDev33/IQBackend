@@ -10,7 +10,8 @@
         "no-console": [false],
         "curly": [true, "ignore-same-line"],
         "callable-types": [false],
-        "no-string-literal": [false]
+        "no-string-literal": [false],
+        "max-line-length": [false]
     },
     "rulesDirectory": []
 }

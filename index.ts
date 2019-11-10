@@ -9,9 +9,12 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import path from 'path';
 
+import { chaosPassport, gaiaPassport, kronosPassport } from './config/adminpass';
 import { dbConfig } from './config/database';
 
 import passportMain from './config/passport';
+
+import { Request, RequestHandler, Response } from 'express';
 
 dotenv.config();
 
@@ -64,15 +67,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passportMain(passport);
-// require('../config/passport')(passport);
-require('../config/adminpass').chaos(passport);
-require('../config/adminpass').gaia(passport);
-require('../config/adminpass').kronos(passport);
+chaosPassport(passport);
+kronosPassport(passport);
+gaiaPassport(passport);
 
 const acceptedAgents = ['IQAPIv1', 'IQiOSv1', 'IQAndroidv1'];
 
 // Check IQ-User-Agent
-const checkAgent = (req: any, res: any, next: any) => {
+const checkAgent = (req: Request, res: Response, next: any) => {
   if (!acceptedAgents.includes(req.header('IQ-User-Agent'))) {
     res.sendStatus(404);
   } else {
@@ -83,24 +85,24 @@ const checkAgent = (req: any, res: any, next: any) => {
 app.use(checkAgent);
 
 // Routes
-const users = require('../routes/users/routes');
-const questions = require('../routes/questions/routes');
-const subjects = require('../routes/subjects/routes');
-const sources = require('../routes/sources/routes');
-const feed = require('../routes/feed/routes');
-const search = require('../routes/search/routes');
-const admin = require('../routes/admin/routes');
-const feedback = require('../routes/feedback/routes');
+import userRoutes from './routes/users/routes';
+// const questions = require('../routes/questions/routes');
+// const subjects = require('../routes/subjects/routes');
+// const sources = require('../routes/sources/routes');
+// const feed = require('../routes/feed/routes');
+// const search = require('../routes/search/routes');
+// const admin = require('../routes/admin/routes');
+// const feedback = require('../routes/feedback/routes');
 
-app.use(apiBase + 'users', users);
-app.use(apiBase + 'questions', questions);
-app.use(apiBase + 'subjects', subjects);
-app.use(apiBase + 'sources', sources);
-app.use(apiBase + 'feed', feed);
-app.use(apiBase + 'search', search);
-app.use(apiBase + 'feedback', feedback);
-
-app.use(apiBase + 'iqad/min', admin);
+app.use(apiBase + 'users', userRoutes);
+// app.use(apiBase + 'questions', questions);
+// app.use(apiBase + 'subjects', subjects);
+// app.use(apiBase + 'sources', sources);
+// app.use(apiBase + 'feed', feed);
+// app.use(apiBase + 'search', search);
+// app.use(apiBase + 'feedback', feedback);
+//
+// app.use(apiBase + 'iqad/min', admin);
 
 // create public folder with the index.html when finished
 app.use(express.static(path.join(__dirname, 'public')));
@@ -114,6 +116,6 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'DEVTEST')
 }
 
 app.listen(port, () => {
-  console.log('Inquantir Backend started in mode \'' + process.env.NODE_ENV + '\'');
+  console.log('Inquantir Backend (TypeScript) started in mode \'' + process.env.NODE_ENV + '\'');
   console.log('Port: ' + port);
 });

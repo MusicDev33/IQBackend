@@ -58,6 +58,7 @@ export let UserSchema: Schema = new Schema({
 
 export interface IUserModel extends Model<IUser> {
   getUserById(mongoId: string, callback: (error: string, user: mongoose.Document) => void): void;
+  changeBio(mongoId: string, bio: string, callback: (error: string, user: mongoose.Document) => void): void;
 }
 
 UserSchema.statics.getUserById = (mongoID: string, callback: (error: string, user: mongoose.Document) => void) => {
