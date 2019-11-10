@@ -26,4 +26,4 @@ const passportMain = (passport: any) => {
   }));
 };
 
-export { passportMain };
+export default passportMain;

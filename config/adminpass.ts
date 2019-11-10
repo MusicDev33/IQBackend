@@ -6,7 +6,7 @@ import { dbConfig } from './database';
 import IAdminCB from './interfaces/IAdminCB';
 
 // Chaos-level Auth
-module.exports.chaos = (gPassport: any) => {
+const chaosPassport = (gPassport: any) => {
   const opts: any = {};
   opts['secretOrKey'] = dbConfig.adminSecret;
   opts['jwtFromRequest'] = ExtractJwt.fromAuthHeaderWithScheme('jwt');
@@ -20,7 +20,7 @@ module.exports.chaos = (gPassport: any) => {
 };
 
 // Gaia-level Auth
-module.exports.gaia = (gPassport: any) => {
+const gaiaPassport = (gPassport: any) => {
   const opts: any = {};
   opts['secretOrKey'] = dbConfig.adminSecret;
   opts['jwtFromRequest'] = ExtractJwt.fromAuthHeaderWithScheme('jwt');
@@ -34,7 +34,7 @@ module.exports.gaia = (gPassport: any) => {
 };
 
 // Kronos-level Auth
-module.exports.kronos = (gPassport: any) => {
+const kronosPassport = (gPassport: any) => {
   const opts: any = {};
   opts['secretOrKey'] = dbConfig.adminSecret;
   opts['jwtFromRequest'] = ExtractJwt.fromAuthHeaderWithScheme('jwt');
@@ -46,3 +46,5 @@ module.exports.kronos = (gPassport: any) => {
     }
   }));
 };
+
+export {chaosPassport, gaiaPassport, kronosPassport };
