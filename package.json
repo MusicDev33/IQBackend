@@ -2,7 +2,7 @@
   "name": "iqbackend",
   "version": "0.1.0",
   "description": "Inquantir Backend",
-  "main": "dist/index.js",
+  "main": "app.js",
   "scripts": {
     "build": "tsc",
     "prestart": "npm run build",

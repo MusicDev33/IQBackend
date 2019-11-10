@@ -11,6 +11,8 @@ import path from 'path';
 
 import { dbConfig } from './config/database';
 
+import passportMain from './config/passport';
+
 dotenv.config();
 
 let apiBase = '/api/v1/';
@@ -61,7 +63,8 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('../config/passport')(passport);
+passportMain(passport);
+// require('../config/passport')(passport);
 require('../config/adminpass').chaos(passport);
 require('../config/adminpass').gaia(passport);
 require('../config/adminpass').kronos(passport);
