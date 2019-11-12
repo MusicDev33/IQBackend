@@ -4,7 +4,7 @@ import passport from 'passport';
 
 import { Request, Response } from 'express';
 
-import { User } from '../../models/usermodel';
+import User from '../../models/usermodel';
 
 // User Setters
 router.post('/:userid/bio', passport.authenticate('jwt', {session: false}), (req: Request, res: Response, next) => {

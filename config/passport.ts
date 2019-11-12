@@ -3,7 +3,7 @@ const JwtStrategy = passportJwt.Strategy;
 const ExtractJwt = passportJwt.ExtractJwt;
 import { dbConfig } from './database';
 
-import { User } from '../models/usermodel';
+import User from '../models/usermodel';
 
 import mongoose from 'mongoose';
 
