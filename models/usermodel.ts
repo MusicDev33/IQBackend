@@ -92,4 +92,6 @@ UserSchema.statics.changeBio = (mongoID: string, bio: string, callback: IUserCB)
   });
 };
 
-export const User: IUserModel = model<IUser, IUserModel>('User', UserSchema);
+const User: IUserModel = model<IUser, IUserModel>('User', UserSchema);
+
+export default User;
