@@ -16,7 +16,7 @@ module.exports.registerLimit = rateLimit({
 
 module.exports.authLimit = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // start blocking after 10 requests
+  max: 60, // start blocking after 10 requests
   message:
     "Too many login attempts have been made"
 });
