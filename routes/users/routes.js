@@ -6,18 +6,22 @@ const UserModule = require('./usermodule')
 
 // Register
 router.post('/register', UserModule.registerLimit, UserModule.registerUser);
+router.post('/g/register', UserModule.registerLimit, UserModule.googleRegisterUser);
 
 // Authentication
 router.post('/authenticate', UserModule.authLimit, UserModule.authorizeUser);
+router.post('/g/authenticate', UserModule.authLimit, UserModule.googleAuthUser);
 
 // User Getters
 router.get('/profile/:handle', UserModule.getUserByHandleRoute);
+router.get('/check/handle/:handle', UserModule.getIfHandleTaken);
 router.get('/:userid/questions', UserModule.getUserQuestionsRoute);
 router.get('/:userid/answers', UserModule.getUserAnswersRoute);
 router.get('/profile', passport.authenticate('jwt', {session:false}), UserModule.getUserProfileRoute);
 
 // User Setters
 router.post('/:userid/bio', passport.authenticate('jwt', {session:false}), UserModule.setUserBioRoute);
+router.put('/:userid/googleid/add', UserModule.setUserGoogleID);
 
 // User Subject Routes
 router.post('/:userid/subjects/:subjectname', passport.authenticate('jwt', {session:false}), UserModule.addSubjectRoute); // User follows subject

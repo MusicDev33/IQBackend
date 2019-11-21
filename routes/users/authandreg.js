@@ -64,7 +64,8 @@ module.exports.registerUser = function(req, res, next) {
             currentSubjects: [],
             currentSources: [],
             profileHits: 0,
-            knowledge: {}
+            knowledge: {},
+            googleID: ''
           });
 
           User.addUser(newUser, (err, user) => {
@@ -76,9 +77,9 @@ module.exports.registerUser = function(req, res, next) {
             }
           });
         }
-      })
+      });
     }
-  })
+  });
 }
 
 module.exports.authorizeUser = function(req, res, next) {
@@ -89,6 +90,9 @@ module.exports.authorizeUser = function(req, res, next) {
     if (!user){
       return res.json({success: false, msg: "User doesn't exist. Creating an account can fix that."});
     } else {
+      if (user.googleID.length) {
+        return res.json({success: false, msg: 'Wrong password!'});
+      }
       User.comparePassword(password, user.password, (err, isMatch) => {
         if (err) throw err;
         if (!isMatch) {
@@ -109,10 +113,9 @@ module.exports.authorizeUser = function(req, res, next) {
               handle: user.handle,
               customization: user.customization
             }
-          })
-
+          });
         }
-      })
+      });
     }
-  })
+  });
 }

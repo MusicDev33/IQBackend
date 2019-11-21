@@ -1,8 +1,8 @@
 // This module is going to be composed
 // of setters for top-level resources in the user only
-const modPath = require('../modelpath')
+const modPath = require('../modelpath');
 const modelPath = modPath.MODEL_PATH;
-const User = require(modelPath + 'usermodel')
+const User = require(modelPath + 'usermodel');
 
 module.exports.setUserBioRoute = function(req, res, next) {
   if ('' + req.user._id !== '' + req.params.userid) {
@@ -15,4 +15,14 @@ module.exports.setUserBioRoute = function(req, res, next) {
       return res.json({success: false, msg: 'Couldn\'t change bio...'});
     }
   });
+}
+
+module.exports.setUserGoogleID = function(req, res, next) {
+  User.changeGoogleID(req.params.userid, req.body.googleID, (err, user) => {
+    if (user) {
+      return res.json({success: true, msg: 'Successfully added Google ID!'})
+    } else {
+      return res.json({success: false, msg: 'Could not change Google ID!!!'})
+    }
+  })
 }

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const config = require("../config/database");
-const StringUtils = require("../ProtoChanges/string")
+const StringUtils = require("../ProtoChanges/string");
 
 const UserSchema = mongoose.Schema({
   fbTokens: {
@@ -49,6 +49,10 @@ const UserSchema = mongoose.Schema({
   type: {
     type: String,
     default: 'user'
+  },
+  googleID: {
+    type: String,
+    default: ''
   }
 }, { minimize: false });
 
@@ -63,6 +67,28 @@ module.exports.getUserById = function(mongoID, callback){
       return callback(null, null);
     }
   });
+}
+
+module.exports.getByGoogleID = function(googleID, callback) {
+  User.findOne({googleID: googleID}, (err, user) => {
+    if (err) throw err;
+    if (user) {
+      return callback(null, user);
+    } else {
+      return callback(null, null);
+    }
+  })
+}
+
+module.exports.changeGoogleID = function(userID, newGoogleID, callback) {
+  User.findOneAndUpdate({_id: userID}, {googleID: newGoogleID}, (err, user) => {
+    if (err) throw err;
+    if (user) {
+      return callback(null, user);
+    } else {
+      return callback(null, null);
+    }
+  })
 }
 
 module.exports.changeBio = function(mongoID, bio, callback) {
@@ -87,7 +113,7 @@ module.exports.changeBio = function(mongoID, bio, callback) {
 
 module.exports.getUserByLogin = function(login, callback) {
   User.findOne({$or:[ {email: login}, {handle: login} ]}, (err, user) => {
-    if (err) callback(err, null)
+    if (err) throw err;
     if (!user){
       callback(null, null);
     } else {
@@ -98,7 +124,7 @@ module.exports.getUserByLogin = function(login, callback) {
 
 module.exports.getUserByEmail = function(email, callback){
   User.findOne({email: email}, (err, user) => {
-    if (err) callback(err, null)
+    if (err) throw err;
     if (!user){
       callback(null, null);
     } else {
@@ -109,7 +135,7 @@ module.exports.getUserByEmail = function(email, callback){
 
 module.exports.getUserByHandle = function(handle, callback){
   User.findOne({handle: handle}, (err, user) => {
-    if (err) callback(err, null)
+    if (err) throw err;
     if (!user){
       callback(null, null);
     } else {
@@ -286,6 +312,17 @@ module.exports.addUser = function(newUser, callback){
       newUser.save(callback)
     })
   });
+}
+
+module.exports.addUserGoogle = function(newUser, callback) {
+  newUser.save((err, savedUser) => {
+    if (err) throw err;
+    if (savedUser) {
+      callback(null, savedUser);
+    } else {
+      callback(null, null);
+    }
+  })
 }
 
 module.exports.comparePassword = function(userPass, hash, callback){

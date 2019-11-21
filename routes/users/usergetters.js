@@ -17,7 +17,18 @@ module.exports.getUserByHandleRoute = function(req, res, next) {
     } else {
       return res.json({success: false, msg: "Couldn't find user by handle."})
     }
-  })
+  });
+}
+
+module.exports.getIfHandleTaken = function(req, res, next) {
+  User.getUserByHandle(req.params.handle, (err, user) => {
+    if (err) throw err;
+    if (user) {
+      return res.json({success: true, userIsTaken: true});
+    } else {
+      return res.json({success: true, userIsTaken: false});
+    }
+  });
 }
 
 module.exports.getUserQuestionsRoute = function(req, res, next) {
