@@ -173,6 +173,30 @@ module.exports.changePreviewAnswer = function(questionURL, answer, callback) {
   })
 }
 
+module.exports.editTags = function(questionID, newTags, callback) {
+  const id = mongoose.Types.ObjectId(questionID);
+  Question.findOneAndUpdate({_id: id}, {$set: {'tags': newTags}}, (err, oldQuestion) => {
+    if (err) throw err;
+    if (oldQuestion) {
+      callback(null, oldQuestion);
+    } else {
+      callback(null, null);
+    }
+  });
+}
+
+module.exports.editSource = function(questionID, newSource, callback) {
+  const id = mongoose.Types.ObjectId(questionID);
+  Question.findOneAndUpdate({_id: id}, {$set: {'homeworkSource': newSource}}, (err, oldQuestion) => {
+    if (err) throw err;
+    if (oldQuestion) {
+      callback(null, oldQuestion);
+    } else {
+      callback(null, null);
+    }
+  });
+}
+
 module.exports.idChangePreviewAnswer = function(questionID, answer, callback) {
   const id = mongoose.Types.ObjectId(questionID);
   Question.findOneAndUpdate({_id: questionID}, {$set:{'previewAnswer': answer}}, (err, oldQuestion) => {

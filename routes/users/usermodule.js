@@ -1,5 +1,6 @@
 module.exports = {
   ...require('./authandreg'),
+  ...require('./googleauthandreg'),
   ...require('./usergetters'),
   ...require('./usersetters'),
   ...require('./usersubjects'),

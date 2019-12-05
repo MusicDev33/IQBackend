@@ -22,4 +22,8 @@ router.put('/:questionid/answers/:answerid', passport.authenticate('jwt', {sessi
 router.delete('/', passport.authenticate('gaia', {session:false}),  QuestionModule.deleteAllQuestions)
 router.delete('/:questionURL/answers/:answerID', passport.authenticate('jwt', {session:false}),  QuestionModule.deleteAnswer)
 
+// Editing
+router.put('/:questionid/tags', passport.authenticate('jwt', {session: false}), QuestionModule.editQuestionTags);
+router.put('/:questionid/source', passport.authenticate('jwt', {session: false}), QuestionModule.editQuestionSource);
+
 module.exports = router;
