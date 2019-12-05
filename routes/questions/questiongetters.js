@@ -75,3 +75,13 @@ module.exports.getAnswerVotesFromUser = function(req, res, next) {
     }
   })
 }
+
+module.exports.getSitemapData = function(req, res, next) {
+  dataString = "";
+  Question.find({}, (err, questions) => {
+    questions.forEach(question => {
+      dataString += "https://inquantir.com/question/" + question.urlText + "\n"
+    })
+    res.json({success: true, txt: dataString});
+  })
+}
