@@ -82,6 +82,6 @@ module.exports.getSitemapData = function(req, res, next) {
     questions.forEach(question => {
       dataString += "https://inquantir.com/question/" + question.urlText + "\n"
     })
-    res.json({success: true, txt: dataString});
+    res.send(dataString);
   })
 }
