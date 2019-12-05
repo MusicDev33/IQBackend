@@ -4,6 +4,9 @@ const passport = require('passport')
 
 const QuestionModule = require('./questionmodule')
 
+// For internal use
+router.get('/developer/sitemapdata', QuestionModule.getSitemapData);
+
 // Getters
 router.get('',  QuestionModule.getAllQuestions)
 router.get('/:questionURL',  QuestionModule.getQuestionByUrl)
