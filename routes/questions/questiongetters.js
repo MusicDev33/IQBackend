@@ -77,7 +77,7 @@ module.exports.getAnswerVotesFromUser = function(req, res, next) {
 }
 
 module.exports.getSitemapData = function(req, res, next) {
-  dataString = "https://inquantir.com/\nhttps://inquantir.com/login\nhttps://inquantir.com/register\nhttps://inquantir.com/suuport\nhttps://inquantir.com/dashboard\n";
+  dataString = "https://inquantir.com/\nhttps://inquantir.com/login\nhttps://inquantir.com/register\nhttps://inquantir.com/support\nhttps://inquantir.com/dashboard\n";
   Question.find({}, (err, questions) => {
     questions.forEach(question => {
       dataString += "https://inquantir.com/question/" + question.urlText + "\n"
