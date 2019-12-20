@@ -53,6 +53,10 @@ const UserSchema = mongoose.Schema({
   googleID: {
     type: String,
     default: ''
+  },
+  paidProgram: {
+    type: Boolean,
+    default: false
   }
 }, { minimize: false });
 
@@ -310,6 +314,17 @@ module.exports.addUser = function(newUser, callback){
       if (err) throw err;
       newUser.password = hash
       newUser.save(callback)
+    })
+  });
+}
+
+module.exports.addContentManagementAgent = function(newConMagent, callback) {
+  newconMagent.paidProgram = true;
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(newConMagent.password, salt, (err, hash) => {
+      if (err) throw err;
+      newConMagent.password = hash
+      newConMagent.save(callback)
     })
   });
 }

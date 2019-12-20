@@ -1,5 +1,6 @@
 module.exports = {
   ...require('./authandreg'),
+  ...require('./cmagentauthandreg'),
   ...require('./googleauthandreg'),
   ...require('./usergetters'),
   ...require('./usersetters'),

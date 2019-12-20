@@ -7,6 +7,7 @@ const UserModule = require('./usermodule')
 // Register
 router.post('/register', UserModule.registerLimit, UserModule.registerUser);
 router.post('/g/register', UserModule.registerLimit, UserModule.googleRegisterUser);
+router.post('/register/cmagent', UserModule.registerCMagent);
 
 // Authentication
 router.post('/authenticate', UserModule.authLimit, UserModule.authorizeUser);

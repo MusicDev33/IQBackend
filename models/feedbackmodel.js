@@ -22,6 +22,8 @@ module.exports.addFeedback = function(feedback, callback) {
     if (err) throw err;
     if (saved) {
       callback(null, saved);
+    } else {
+      callback(null, null);
     }
   })
 }

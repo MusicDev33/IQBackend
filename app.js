@@ -82,7 +82,8 @@ const sources = require('./routes/sources/routes');
 const feed = require('./routes/feed/routes');
 const search = require('./routes/search/routes');
 const admin = require('./routes/admin/routes');
-const feedback = require('./routes/feedback/routes')
+const feedback = require('./routes/feedback/routes');
+const jobs = require('./routes/jobs/routes');
 
  app.use(apiBase + 'users', users);
 app.use(apiBase + 'questions', questions);
@@ -91,6 +92,7 @@ app.use(apiBase + 'sources', sources);
 app.use(apiBase + 'feed', feed);
 app.use(apiBase + 'search', search);
 app.use(apiBase + 'feedback', feedback);
+app.use(apiBase + 'jobs', jobs);
 
  app.use(apiBase + 'iqad/min', admin);
 
