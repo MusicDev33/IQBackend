@@ -7,6 +7,12 @@ const EditLogSchema = mongoose.Schema({
   userID: { // User who made the edit
     type: String
   },
+  userHandle: {
+    type: String
+  },
+  userName: {
+    type: String
+  },
   paidContent: {
     type: Boolean
   },

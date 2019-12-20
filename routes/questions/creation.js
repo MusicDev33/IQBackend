@@ -4,8 +4,10 @@ const modPath = require('../modelpath')
 const modelPath = modPath.MODEL_PATH;
 
 const Vote = require(modelPath + 'votemodel')
+const User = require(modelPath + 'usermodel');
 const Question = require(modelPath + 'questionmodel')
 const Answer = require(modelPath + 'answermodel')
+const EditLog = require(modelPath + 'editlogmodel')
 
 
 module.exports.createQuestion = function(req, res, next) {
@@ -32,6 +34,17 @@ module.exports.createQuestion = function(req, res, next) {
 
   Question.addQuestion(newQuestion, (err, question) => {
     if (question) {
+      User.getUserById(req.body.askerID, (err, user) => {
+        const editLog = new EditLog({
+          contentID: '' + question._id,
+          userID: req.body.askerID,
+          userName: user.name,
+          userHandle: user.handle,
+          editType: 'question',
+          paidContent: user.paidProgram
+        })
+        EditLog.createLog(editLog, (err, savedLog) => {});
+      })
       return res.json({success: true, msg: 'Added question successfully.'});
     } else {
       return res.json({success: false, msg: 'Something went wrong...'})
@@ -51,11 +64,11 @@ module.exports.createVote = function(req, res, next) {
           if (question) {
             Answer.getAnswersByQuestionURL(question.urlText, (err, answers) => {
               const highestVoteAnswer = answers.reduce((prev, current) => {
-                  if (+current.id > +prev.id) {
-                      return current;
-                  } else {
-                      return prev;
-                  }
+                if (+current.id > +prev.id) {
+                  return current;
+                } else {
+                  return prev;
+                }
               });
 
               const shortenedAnswer = {
