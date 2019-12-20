@@ -12,6 +12,12 @@ const JobApplicationSchema = mongoose.Schema({
   },
   skillsDesc: {
     type: String
+  },
+  jobType: { // This will entry, Mid-Management, etc...really just to cover my ass in the future just in case.
+    type: String
+  },
+  job: {
+    type: String // This is the job - Content Management Agent, CTO, etc. Again, covering my ass for a possible future.
   }
 });
 

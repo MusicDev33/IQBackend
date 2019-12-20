@@ -7,7 +7,9 @@ module.exports.sendApplication = function(req, res, next) {
     fullName: req.body.name,
     email: req.body.email,
     phoneNumber: req.body.phoneNumber,
-    skillsDesc: req.body.skills
+    skillsDesc: req.body.skills,
+    job: req.body.job,
+    jobType: req.body.jobType
   });
 
   JobApplication.saveApplication(newJobApp, (err, savedApp) => {
